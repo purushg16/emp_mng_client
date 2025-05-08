@@ -77,7 +77,7 @@ const EmployeeForm = ({
           </Typography>
 
           <Stack width="100%" direction="row" gap={2}>
-            <EmployeeDOBPicker />
+            <EmployeeDOBPicker disabled={preview} />
             <SelectInput
               label="gender"
               data={genders}

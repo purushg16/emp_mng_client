@@ -1,4 +1,4 @@
-import { FastField, FieldProps } from "formik";
+import { useField } from "formik";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { EmployeeFormValues } from "../../../entities/formValues";
@@ -18,22 +18,20 @@ const EmployeeTextField = ({
   disabled = false,
   inputProps,
 }: Props) => {
+  const [field, meta] = useField(name);
+
   return (
-    <FastField name={name}>
-      {({ field, meta }: FieldProps) => (
-        <TextField
-          {...field}
-          fullWidth
-          size="small"
-          type={type}
-          label={label}
-          disabled={disabled}
-          error={Boolean(meta.touched && meta.error)}
-          helperText={meta.touched && meta.error}
-          InputProps={inputProps}
-        />
-      )}
-    </FastField>
+    <TextField
+      {...field}
+      fullWidth
+      size="small"
+      type={type}
+      label={label}
+      disabled={disabled}
+      error={Boolean(meta.touched && meta.error)}
+      helperText={meta.touched && meta.error}
+      InputProps={inputProps}
+    />
   );
 };
 
