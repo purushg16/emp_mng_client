@@ -7,17 +7,9 @@ import {
   MdOutlineEventBusy,
 } from "react-icons/md";
 import { RiBuildingFill, RiBuildingLine } from "react-icons/ri";
-import type { PathLabel } from "../../entities/pathLabel";
-import type { ReactNode } from "react";
+import { NavigationMenu } from "../../entities/NavigationMenu";
 
-export interface AdminMenu {
-  label: string;
-  icon: ReactNode;
-  activeIcon: ReactNode;
-  children?: PathLabel[];
-}
-
-export const adminMenus: AdminMenu[] = [
+export const adminMenus: NavigationMenu[] = [
   {
     label: "Dashboard",
     icon: <MdOutlineSpaceDashboard />,

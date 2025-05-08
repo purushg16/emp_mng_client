@@ -1,15 +1,19 @@
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import type { AdminMenu } from "../../data/admin/adminMenus";
+import type { NavigationMenu } from "../../entities/NavigationMenu";
 import { Link, useLocation } from "react-router";
 import toCamelCase from "../../helpers/convertToCamelCase";
 
 interface SidebarButtonProps {
-  menu: AdminMenu;
+  menu: NavigationMenu;
 }
 
 const SidebarButton = ({ menu }: SidebarButtonProps) => {
-  const path = toCamelCase(menu.label);
-  const active = useLocation().pathname.split("/")[1] == path;
+  const label = toCamelCase(menu.label);
+  const isEmployee = useLocation().pathname.split("/")[1] == "employee";
+  const active = useLocation().pathname.split("/")[2] == label;
+
+  const path =
+    window.location.origin + `${isEmployee ? "/employee" : "/admin"}/${label}`;
 
   return (
     <ListItemButton
