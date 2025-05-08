@@ -3,6 +3,9 @@ export interface DepartmentFields {
   name: string;
   shortName: string;
 }
+export interface DeleteDepartment {
+  id: string;
+}
 
 export interface Department extends DepartmentFields {
   id: number;
