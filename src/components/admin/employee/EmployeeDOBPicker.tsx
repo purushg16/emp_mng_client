@@ -4,12 +4,13 @@ import { FastField, FieldProps } from "formik";
 import React from "react";
 import { EmployeeFormValues } from "../../../entities/formValues";
 
-const EmployeeDOBPicker = () => {
+const EmployeeDOBPicker = ({ disabled = false }: { disabled?: boolean }) => {
   return (
     <FastField name="birthday">
       {({ field, form, meta }: FieldProps<EmployeeFormValues>) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
+            disabled={disabled}
             label="Date of Birth"
             value={field.value.birthday}
             onChange={(date) => form.setFieldValue("birthday", date)}

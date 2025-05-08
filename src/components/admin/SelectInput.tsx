@@ -16,6 +16,8 @@ interface Props {
   data: SelectItem[];
   value: string;
   name?: string;
+  disabled?: boolean;
+
   onChange: {
     (e: React.ChangeEvent<any>): void;
     <T_1 = string | React.ChangeEvent<any>>(
@@ -33,12 +35,13 @@ const SelectInput = ({
   data,
   name,
   value,
+  disabled = false,
   onChange,
   error,
   isError,
 }: Props) => {
   return (
-    <FormControl size="small" fullWidth error={isError}>
+    <FormControl size="small" fullWidth error={isError} disabled={disabled}>
       <InputLabel sx={{ textTransform: "capitalize" }}>{label}</InputLabel>
       <Select
         id={label}

@@ -29,3 +29,19 @@ export type EmployeeFormValues = {
   departmentId: string;
   birthday: Date | null;
 };
+
+export type EmployeeProfileFormValues = {
+  code: string;
+  firstName: string;
+  lastName: string;
+  gender: "male" | "female" | "others";
+  email: string;
+  phone: string;
+  country: string;
+  password: string;
+  confirmPassword: string;
+  city: string;
+  address: string;
+  departmentId: string;
+  birthday: Date | null;
+};

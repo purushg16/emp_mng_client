@@ -5,7 +5,10 @@ import { departments } from "../../../data/admin/deps";
 import genders from "../../../data/admin/genders";
 import { initialEmployeeValues } from "../../../data/admin/initialFormValues";
 import employeeSchema from "../../../data/validations/employeeSchema";
-import type { EmployeeFormValues } from "../../../entities/formValues";
+import type {
+  EmployeeFormValues,
+  EmployeeProfileFormValues,
+} from "../../../entities/formValues";
 import SelectInput from "../SelectInput";
 import EmployeeDOBPicker from "./EmployeeDOBPicker";
 import EmployeePasswordInput from "./EmployeePasswordInput";
@@ -13,13 +16,19 @@ import EmployeeTextField from "./EmployeeTextInput";
 
 type EmployeeFormProps = {
   onClose: () => void;
-  onSubmit: (values: EmployeeFormValues) => void;
-  initialValues?: EmployeeFormValues;
+  onSubmit: (values: EmployeeFormValues | EmployeeProfileFormValues) => void;
+  preview?: boolean;
+  action?: "create" | "edit";
+  isEmployee?: boolean;
+  initialValues?: EmployeeFormValues | EmployeeProfileFormValues;
 };
 
 const EmployeeForm = ({
+  action = "create",
   onClose,
   onSubmit,
+  preview = false,
+  isEmployee = false,
   initialValues = initialEmployeeValues,
 }: EmployeeFormProps) => {
   const formik = useFormik({
@@ -29,6 +38,11 @@ const EmployeeForm = ({
     validateOnChange: false,
     validateOnBlur: true,
   });
+
+  const handleCancel = () => {
+    formik.resetForm();
+    onClose();
+  };
 
   return (
     <FormikProvider value={formik}>
@@ -40,13 +54,23 @@ const EmployeeForm = ({
               label="First Name"
               name="firstName"
               type="text"
+              disabled={preview}
             />
-            <EmployeeTextField label="Last Name" name="lastName" type="text" />
+            <EmployeeTextField
+              label="Last Name"
+              name="lastName"
+              type="text"
+              disabled={preview}
+            />
           </Stack>
-          <Typography variant="subtitle1" mt={1}>
-            Security
-          </Typography>
-          <EmployeePasswordInput />
+          {!isEmployee && (
+            <>
+              <Typography variant="subtitle1" mt={1}>
+                Security
+              </Typography>
+              <EmployeePasswordInput />
+            </>
+          )}
 
           <Typography variant="subtitle1" mt={1}>
             Basics
@@ -61,55 +85,89 @@ const EmployeeForm = ({
               onChange={formik.handleChange}
               isError={formik.touched.gender && Boolean(formik.errors.gender)}
               error={formik.errors.gender || ""}
+              disabled={preview}
             />
 
-            <SelectInput
-              label="department"
-              name="departmentId"
-              data={departments.map((dep) => {
-                return {
-                  value: dep.code,
-                  label: dep.name,
-                };
-              })}
-              value={formik.values.departmentId}
-              onChange={formik.handleChange}
-              isError={
-                formik.touched.departmentId &&
-                Boolean(formik.errors.departmentId)
-              }
-              error={formik.errors.departmentId || ""}
-            />
+            {!isEmployee && (
+              <SelectInput
+                label="department"
+                name="departmentId"
+                data={departments.map((dep) => {
+                  return {
+                    value: dep.code,
+                    label: dep.name,
+                  };
+                })}
+                value={formik.values.departmentId}
+                onChange={formik.handleChange}
+                isError={
+                  formik.touched.departmentId &&
+                  Boolean(formik.errors.departmentId)
+                }
+                error={formik.errors.departmentId || ""}
+                disabled={preview}
+              />
+            )}
           </Stack>
 
           <Typography variant="subtitle1" mt={1}>
             Contact
           </Typography>
           <Stack width="100%" direction="row" gap={2}>
-            <EmployeeTextField name="email" label="Email" />
-            <EmployeeTextField name="phone" label="Phone Number" />
+            <EmployeeTextField name="email" label="Email" disabled={preview} />
+            <EmployeeTextField
+              name="phone"
+              label="Phone Number"
+              disabled={preview}
+            />
           </Stack>
 
           <Typography variant="subtitle1" mt={1}>
             Address
           </Typography>
           <Stack width="100%" direction="row" gap={2}>
-            <EmployeeTextField name="address" label="Address" />
-            <EmployeeTextField name="country" label="Country" />
-            <EmployeeTextField name="city" label="City/Town" />
+            <EmployeeTextField
+              name="address"
+              label="Address"
+              disabled={preview}
+            />
+            <EmployeeTextField
+              name="country"
+              label="Country"
+              disabled={preview}
+            />
+            <EmployeeTextField
+              name="city"
+              label="City/Town"
+              disabled={preview}
+            />
           </Stack>
 
           <Grid size={12} mt={4}>
             <Stack
               width="100%"
               direction="row"
-              justifyContent="flex-end"
+              justifyContent={isEmployee ? "center" : "flex-end"}
               gap={2}
             >
-              <Button onClick={onClose}>Cancel</Button>
-              <Button variant="contained" type="submit">
-                Create Employee
-              </Button>
+              {(!isEmployee || !preview) && (
+                <>
+                  <Button
+                    onClick={handleCancel}
+                    color={isEmployee ? "success" : "primary"}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    color={isEmployee ? "success" : "primary"}
+                  >
+                    {isEmployee && "Update Profile"}
+                    {!isEmployee && action + "Employee"}
+                  </Button>
+                </>
+              )}
             </Stack>
           </Grid>
         </Grid>

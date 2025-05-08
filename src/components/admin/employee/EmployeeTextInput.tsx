@@ -7,6 +7,7 @@ interface Props {
   name: keyof EmployeeFormValues;
   label: string;
   type?: string;
+  disabled?: boolean;
   inputProps?: Partial<React.ComponentProps<typeof TextField>>["InputProps"];
 }
 
@@ -14,6 +15,7 @@ const EmployeeTextField = ({
   name,
   label,
   type = "text",
+  disabled = false,
   inputProps,
 }: Props) => {
   return (
@@ -25,6 +27,7 @@ const EmployeeTextField = ({
           size="small"
           type={type}
           label={label}
+          disabled={disabled}
           error={Boolean(meta.touched && meta.error)}
           helperText={meta.touched && meta.error}
           InputProps={inputProps}
