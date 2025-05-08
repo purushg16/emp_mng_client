@@ -14,6 +14,13 @@ export type LeaveApproveFormValues = {
   description?: string;
 };
 
+export type ApplyLeaveFormValues = {
+  from: Date;
+  to: Date;
+  leaveTypeId: string;
+  desc: string;
+};
+
 export type EmployeeFormValues = {
   code: string;
   firstName: string;

@@ -7,12 +7,12 @@ import { EmployeeFormValues } from "../../../entities/formValues";
 const EmployeeDOBPicker = ({ disabled = false }: { disabled?: boolean }) => {
   return (
     <FastField name="birthday">
-      {({ field, form, meta }: FieldProps<EmployeeFormValues>) => (
+      {({ form, meta }: FieldProps<EmployeeFormValues>) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             disabled={disabled}
             label="Date of Birth"
-            value={field.value.birthday}
+            value={form.values.birthday}
             onChange={(date) => form.setFieldValue("birthday", date)}
             slotProps={{
               textField: {
