@@ -1,25 +1,22 @@
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import type { AdminMenu } from "../../data/admin/adminMenus";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import toCamelCase from "../../helpers/convertToCamelCase";
 
 interface SidebarButtonProps {
   menu: AdminMenu;
-  active?: boolean;
-  onClick?: () => void;
 }
 
-const SidebarButton = ({
-  menu,
-  active = false,
-  onClick,
-}: SidebarButtonProps) => {
+const SidebarButton = ({ menu }: SidebarButtonProps) => {
+  const path = toCamelCase(menu.label);
+  const active = useLocation().pathname.split("/")[1] == path;
+
   return (
     <ListItemButton
       component={Link}
-      to={toCamelCase(menu.label)}
-      onClick={onClick}
+      to={path}
       sx={{
+        textTransform: "capitalize",
         backgroundColor: active ? "#f0f0f0" : "transparent",
         "&:hover": { backgroundColor: "#f5f5f5" },
         borderLeft: "2px solid",

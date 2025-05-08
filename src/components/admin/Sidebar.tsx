@@ -1,11 +1,8 @@
 import { Box, Drawer, List, Toolbar } from "@mui/material";
-import { useState } from "react";
 import SidebarButton from "./SidebarButton";
 import { adminMenus } from "../../data/admin/adminMenus";
 
 const Sidebar = () => {
-  const [activeTab, setActiveTab] = useState<string>("Department");
-
   return (
     <Drawer
       variant="permanent"
@@ -24,12 +21,7 @@ const Sidebar = () => {
       <Box sx={{ mt: 2 }}>
         <List>
           {adminMenus.map((menu) => (
-            <SidebarButton
-              key={menu.label}
-              menu={menu}
-              active={activeTab === menu.label}
-              onClick={() => setActiveTab(menu.label)}
-            />
+            <SidebarButton key={menu.label} menu={menu} />
           ))}
         </List>
       </Box>
