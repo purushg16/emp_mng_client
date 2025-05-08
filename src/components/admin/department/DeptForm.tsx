@@ -1,19 +1,13 @@
 import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import type { DepartmentFormValues } from "../../../entities/formValues";
+import departmentSchema from "../../../data/validations/departmentSchema";
 
 type DepartmentFormProps = {
   initialValues?: DepartmentFormValues;
   onClose: () => void;
   onSubmit: (values: DepartmentFormValues) => void;
 };
-
-const validationSchema = Yup.object({
-  code: Yup.string().length(3).required("Department code is required"),
-  name: Yup.string().min(6).required("Department name is required"),
-  shortName: Yup.string().min(2).required("Short name is required"),
-});
 
 const DepartmentForm = ({
   onClose,
@@ -22,7 +16,7 @@ const DepartmentForm = ({
 }: DepartmentFormProps) => {
   const formik = useFormik<DepartmentFormValues>({
     initialValues,
-    validationSchema,
+    validationSchema: departmentSchema,
     onSubmit,
   });
 

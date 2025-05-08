@@ -1,18 +1,13 @@
 import { TextField, Button, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import type { LeaveTypeFormValues } from "../../../entities/formValues";
+import leaveTypeSchema from "../../../data/validations/leaveTypeSchema";
 
 type NewLeaveTypeModalProps = {
   onClose: () => void;
   onSubmit: (values: LeaveTypeFormValues) => void;
   initialValues?: LeaveTypeFormValues;
 };
-
-const validationSchema = Yup.object({
-  name: Yup.string().min(2).required("Leave type name is required"),
-  description: Yup.string().required("Leave type description is required"),
-});
 
 const NewLeaveTypeModal = ({
   onClose,
@@ -21,7 +16,7 @@ const NewLeaveTypeModal = ({
 }: NewLeaveTypeModalProps) => {
   const formik = useFormik<LeaveTypeFormValues>({
     initialValues: initialValues,
-    validationSchema,
+    validationSchema: leaveTypeSchema,
     onSubmit: (values) => {
       onSubmit(values);
       formik.resetForm();
