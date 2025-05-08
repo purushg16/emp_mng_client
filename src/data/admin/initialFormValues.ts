@@ -1,6 +1,7 @@
 import {
   DepartmentFormValues,
   EmployeeFormValues,
+  LeaveApproveFormValues,
   LeaveTypeFormValues,
 } from "../../entities/formValues";
 
@@ -24,6 +25,11 @@ export const initialLeaveTypeValues = {
   name: "",
   description: "",
 } as LeaveTypeFormValues;
+
+export const initialLeaveApproveValues = {
+  status: "approved",
+  description: "",
+} as LeaveApproveFormValues;
 
 export const initialDepartmentValues = {
   code: "",

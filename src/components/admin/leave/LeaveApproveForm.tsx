@@ -1,23 +1,24 @@
 import { TextField, Button, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import type { LeaveTypeFormValues } from "../../../entities/formValues";
-import leaveTypeSchema from "../../../data/validations/leaveTypeSchema";
-import { initialLeaveTypeValues } from "../../../data/admin/initialFormValues";
+import type { LeaveApproveFormValues } from "../../../entities/formValues";
+import { initialLeaveApproveValues } from "../../../data/admin/initialFormValues";
+import leaveSchema from "../../../data/validations/leaveSchema";
+import SelectInput from "../SelectInput";
 
 type NewLeaveTypeModalProps = {
   onClose: () => void;
-  onSubmit: (values: LeaveTypeFormValues) => void;
-  initialValues?: LeaveTypeFormValues;
+  onSubmit: (values: LeaveApproveFormValues) => void;
+  initialValues?: LeaveApproveFormValues;
 };
 
-const NewLeaveTypeModal = ({
+const LeaveApproveForm = ({
   onClose,
   onSubmit,
-  initialValues = initialLeaveTypeValues,
+  initialValues = initialLeaveApproveValues,
 }: NewLeaveTypeModalProps) => {
-  const formik = useFormik<LeaveTypeFormValues>({
+  const formik = useFormik<LeaveApproveFormValues>({
     initialValues: initialValues,
-    validationSchema: leaveTypeSchema,
+    validationSchema: leaveSchema,
     onSubmit: (values) => {
       onSubmit(values);
       formik.resetForm();
@@ -25,30 +26,24 @@ const NewLeaveTypeModal = ({
     },
   });
 
+  console.log(formik.values.status);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Stack mb={0}>
         <Typography variant="subtitle1" gutterBottom>
-          Name
+          Action
         </Typography>
-        <TextField
-          fullWidth
-          size="small"
-          variant="outlined"
-          id="name"
-          name="name"
-          label="Leave Type Name"
-          value={formik.values.name}
+        <SelectInput
+          data={[
+            { label: "Approved", value: "approved" },
+            { label: "Declined", value: "declined" },
+          ]}
+          label="status"
+          value={formik.values.status}
           onChange={formik.handleChange}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-          slotProps={{
-            formHelperText: {
-              sx: {
-                textTransform: "capitalize",
-              },
-            },
-          }}
+          isError={formik.touched.status && Boolean(formik.errors.status)}
+          error={formik.errors.status || ""}
         />
 
         <Typography variant="subtitle1" mt={3} gutterBottom>
@@ -78,7 +73,7 @@ const NewLeaveTypeModal = ({
         <Stack gap={4} direction="row" justifyContent="end" mt={4}>
           <Button onClick={onClose}>Cancel</Button>
           <Button type="submit" variant="contained">
-            Create Leave Type
+            Create Leave
           </Button>
         </Stack>
       </Stack>
@@ -86,4 +81,4 @@ const NewLeaveTypeModal = ({
   );
 };
 
-export default NewLeaveTypeModal;
+export default LeaveApproveForm;

@@ -55,7 +55,7 @@ const EmployeeForm = ({
           <Stack width="100%" direction="row" gap={2}>
             <EmployeeDOBPicker />
             <SelectInput
-              label="Gender"
+              label="gender"
               data={genders}
               value={formik.values.gender}
               onChange={formik.handleChange}
@@ -64,7 +64,8 @@ const EmployeeForm = ({
             />
 
             <SelectInput
-              label="Department"
+              label="department"
+              name="departmentId"
               data={departments.map((dep) => {
                 return {
                   value: dep.code,

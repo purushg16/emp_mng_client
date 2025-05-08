@@ -6,6 +6,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import EmployeePage from "./pages/admin/EmployeePage";
 import DepartmentPage from "./pages/admin/DepartmentPage";
 import LeaveTypePage from "./pages/admin/LeaveTypePage";
+import LeavePage from "./pages/admin/LeavePage";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/department" element={<DepartmentPage />} />
             <Route path="/leaveType" element={<LeaveTypePage />} />
+            <Route path="/leave" element={<LeavePage />} />
             <Route path="/employee" element={<EmployeePage />} />
           </Routes>
         </Box>

@@ -9,6 +9,11 @@ export type LeaveTypeFormValues = {
   description: string;
 };
 
+export type LeaveApproveFormValues = {
+  status: "approved" | "declined";
+  description?: string;
+};
+
 export type EmployeeFormValues = {
   code: string;
   firstName: string;
