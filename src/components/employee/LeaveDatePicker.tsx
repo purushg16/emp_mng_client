@@ -1,9 +1,9 @@
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ApplyLeaveFormValues } from "../../entities/formValues";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { FastField, FieldProps } from "formik";
-import React, { useMemo } from "react";
+import React from "react";
 import { MobileDatePicker } from "@mui/x-date-pickers";
+import { useField, useFormikContext } from "formik";
 
 const LeaveDatePicker = ({
   name,
@@ -14,35 +14,27 @@ const LeaveDatePicker = ({
   label: string;
   disabled?: boolean;
 }) => {
-  const today = useMemo(() => new Date(), []);
+  const [field, meta] = useField(name);
+  const { setFieldValue } = useFormikContext<ApplyLeaveFormValues>();
 
   return (
-    <FastField name={name}>
-      {({ form, meta }: FieldProps<ApplyLeaveFormValues>) => {
-        const dateValue = form.getFieldProps(name).value;
-        const minDate = name === "to" ? form.values.from : today;
-
-        return (
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDatePicker
-              label={label}
-              disabled={disabled}
-              value={dateValue}
-              minDate={minDate}
-              onChange={(date) => form.setFieldValue(name, date)}
-              slotProps={{
-                textField: {
-                  size: "small",
-                  fullWidth: true,
-                  error: Boolean(meta.touched && meta.error),
-                  helperText: meta.touched && meta.error,
-                },
-              }}
-            />
-          </LocalizationProvider>
-        );
-      }}
-    </FastField>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <MobileDatePicker
+        label={label}
+        disabled={disabled}
+        value={field.value}
+        minDate={new Date()}
+        onChange={(date) => setFieldValue(name, date)}
+        slotProps={{
+          textField: {
+            size: "small",
+            fullWidth: true,
+            error: Boolean(meta.touched && meta.error),
+            helperText: meta.touched && meta.error,
+          },
+        }}
+      />
+    </LocalizationProvider>
   );
 };
 

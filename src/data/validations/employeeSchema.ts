@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { startOfToday } from "date-fns";
 
 export default Yup.object().shape({
   code: Yup.string().required("Code is required"),
@@ -21,7 +22,7 @@ export default Yup.object().shape({
   city: Yup.string().required("City/Town is required"),
   address: Yup.string().required("Address is required"),
   departmentId: Yup.string().required("Department is required"),
-  birthday: Yup.date().nullable().required("Date of Birth is required"),
+  birthday: Yup.date().max(startOfToday(), "Start date cannot be in the past"),
 });
 
 export const updateEmployeeProfile = Yup.object().shape({
