@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
 });
 
-export default class APIClient<T> {
+export default class APIClient<T, R> {
   endpoint: string;
 
   constructor(endpoint: string) {
@@ -20,7 +20,7 @@ export default class APIClient<T> {
 
   get = (subPath = "", config?: AxiosRequestConfig) => {
     return axiosInstance
-      .get<T>(`${this.endpoint}${subPath}`, config)
+      .get<T>(`${this.endpoint}/:${subPath}`, config)
       .then((res) => res.data);
   };
 
@@ -32,19 +32,19 @@ export default class APIClient<T> {
 
   post = (data?: Partial<T>, config?: AxiosRequestConfig) => {
     return axiosInstance
-      .post<T>(this.endpoint, data, config)
+      .post<FetchResponse<R>>(this.endpoint, data, config)
       .then((res) => res.data);
   };
 
-  put = (subPath?: string, data?: Partial<T>, config?: AxiosRequestConfig) => {
+  put = (subPath = "", data?: Partial<T>, config?: AxiosRequestConfig) => {
     return axiosInstance
-      .put<T>(`${this.endpoint}/:${subPath}`, data, config)
+      .put<FetchResponse<R>>(`${this.endpoint}/:${subPath}`, data, config)
       .then((res) => res.data);
   };
 
   delete = (subPath: string, config?: AxiosRequestConfig) => {
     return axiosInstance
-      .delete<T>(`${this.endpoint}/:${subPath}`, config)
+      .delete<FetchResponse<R>>(`${this.endpoint}/:${subPath}`, config)
       .then((res) => res.data);
   };
 }

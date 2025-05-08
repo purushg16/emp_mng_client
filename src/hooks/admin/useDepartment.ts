@@ -4,23 +4,21 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import ms from "ms";
+import { useSnackbar } from "notistack";
+import { CACHE_DEPARTMENTS } from "../../data/admin/cache_key";
+import { Department, DepartmentFields } from "../../entities/department";
 import {
   createDepartment,
   deleteDepartment,
   getAllDepartments,
   getSingleDepartment,
+  updateDepartment,
 } from "../../service/admin-client";
-import {
-  DeleteDepartment,
-  Department,
-  DepartmentFields,
-} from "../../entities/department";
-import { CACHE_DEPARTMENTS } from "../../data/admin/cache_key";
 import { FetchResponse } from "../../service/api-client";
-import ms from "ms";
 
 const useGetAllDepartment = (itemsPerPage = 5) => {
-  return useInfiniteQuery<FetchResponse<Department>, Error>({
+  return useInfiniteQuery({
     queryKey: CACHE_DEPARTMENTS,
     queryFn: ({ pageParam = 1 }) =>
       getAllDepartments({
@@ -37,79 +35,85 @@ const useGetAllDepartment = (itemsPerPage = 5) => {
 };
 
 const useGetSingleDepartment = (id: string) => {
-  return useQuery<Department, Error>({
+  return useQuery({
     queryKey: [...CACHE_DEPARTMENTS, id],
-    queryFn: () => getSingleDepartment(),
+    queryFn: () => getSingleDepartment(id),
     staleTime: ms("24h"),
   });
 };
 
-const useCreateDepartment = (
-  employee: DepartmentFields,
-  successCb: () => void,
-  errorCb: () => void
-) => {
+const useCreateDepartment = (successCb: () => void, errorCb: () => void) => {
   const queryClient = useQueryClient();
-  return useMutation<DepartmentFields, Error, Department>({
-    mutationFn: () =>
-      createDepartment({
-        ...employee,
-      }),
-    onSuccess: (_data, variables) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  return useMutation({
+    mutationFn: createDepartment,
+    onSuccess: (data) => {
       successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
       queryClient.invalidateQueries({
-        queryKey: [...CACHE_DEPARTMENTS, variables.id],
+        queryKey: [...CACHE_DEPARTMENTS, data.data[0].id],
       });
+      enqueueSnackbar(data.message, { variant: "success" });
     },
-    onError: () => errorCb(),
+    onError: (error) => {
+      errorCb();
+      enqueueSnackbar(error.message, { variant: "error" });
+    },
   });
 };
 
 const useEditDepartment = (
-  department: Partial<DepartmentFields>,
+  id: string,
   successCb: () => void,
   errorCb: () => void
 ) => {
   const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
 
-  return useMutation<DepartmentFields, Error, Department>({
-    mutationFn: () =>
-      createDepartment({
-        ...department,
-      }),
-    onSuccess: (_data, variables) => {
+  return useMutation<
+    FetchResponse<Department>,
+    Error,
+    Partial<DepartmentFields>
+  >({
+    mutationFn: (data) => updateDepartment(id, data),
+    onSuccess: (data) => {
       successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
       queryClient.invalidateQueries({
-        queryKey: [...CACHE_DEPARTMENTS, variables.id],
+        queryKey: [...CACHE_DEPARTMENTS, data.data[0].id],
       });
+      enqueueSnackbar(data.message, { variant: "success" });
     },
-    onError: () => errorCb(),
+    onError: (error) => {
+      enqueueSnackbar(error.message, { variant: "error" });
+      errorCb();
+    },
   });
 };
 
-const useDeleteDepartment = (
-  departmentId: string,
-  successCb: () => void,
-  errorCb: () => void
-) => {
+const useDeleteDepartment = (successCb: () => void, errorCb: () => void) => {
   const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
 
-  return useMutation<DeleteDepartment, Error, Department>({
-    mutationFn: () => deleteDepartment(departmentId),
-    onSuccess: () => {
+  return useMutation({
+    mutationFn: deleteDepartment,
+    onSuccess: (data) => {
       successCb();
+      enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
     },
-    onError: () => errorCb(),
+    onError: (error) => {
+      enqueueSnackbar(error.message, { variant: "error" });
+      errorCb();
+    },
   });
 };
 
 export {
+  useCreateDepartment,
+  useDeleteDepartment,
+  useEditDepartment,
   useGetAllDepartment,
   useGetSingleDepartment,
-  useCreateDepartment,
-  useEditDepartment,
-  useDeleteDepartment,
 };

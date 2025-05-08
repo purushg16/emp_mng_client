@@ -7,6 +7,7 @@ import { CssBaseline } from "@mui/material";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import router from "./router/router.tsx";
+import { SnackbarProvider } from "notistack";
 
 const darkTheme = createTheme({
   palette: {
@@ -17,7 +18,9 @@ const darkTheme = createTheme({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={darkTheme}>
-      <RouterProvider router={router} />
+      <SnackbarProvider>
+        <RouterProvider router={router} />
+      </SnackbarProvider>
       <CssBaseline />
     </ThemeProvider>
   </StrictMode>

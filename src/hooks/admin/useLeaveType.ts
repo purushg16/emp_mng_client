@@ -7,13 +7,10 @@ import {
 } from "../../service/admin-client";
 import { CACHE_LEAVE_TYPE } from "../../data/admin/cache_key";
 import { FetchResponse } from "../../service/api-client";
-import {
-  DeleteLeaveType,
-  LeaveType,
-  LeaveTypeFields,
-} from "../../entities/leaveType";
+import { LeaveType, LeaveTypeFields } from "../../entities/leaveType";
 import ms from "ms";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 
 const useGetAllLeaveType = () => {
   return useQuery<FetchResponse<LeaveType>, Error>({
@@ -31,44 +28,52 @@ const useGetSingleLeaveType = (id: string) => {
   });
 };
 
-const useCreateLeaveType = (
-  leaveType: LeaveTypeFields,
-  successCb: () => void,
-  errorCb: () => void
-) => {
+const useCreateLeaveType = (successCb: () => void, errorCb: () => void) => {
   const queryClient = useQueryClient();
-  return useMutation<LeaveTypeFields, Error, LeaveType>({
-    mutationFn: () => createLeaveType({ ...leaveType }),
-    onSuccess: (_data, variables) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  return useMutation<FetchResponse<LeaveType>, Error, LeaveTypeFields>({
+    mutationFn: createLeaveType,
+    onSuccess: (data) => {
       successCb();
+      enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_LEAVE_TYPE });
       queryClient.invalidateQueries({
-        queryKey: [...CACHE_LEAVE_TYPE, variables.id],
+        queryKey: [...CACHE_LEAVE_TYPE, data.data[0].id],
       });
     },
-    onError: () => errorCb(),
+    onError: (err) => {
+      enqueueSnackbar(err.message, { variant: "error" });
+      errorCb();
+    },
   });
 };
 
 const useEditLeaveType = (
   id: string,
-  lt: Partial<LeaveTypeFields>,
   successCb: () => void,
   errorCb: () => void
 ) => {
   const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
 
-  return useMutation<Partial<LeaveTypeFields>, Error, LeaveType>({
-    mutationFn: () => updateLeaveType(id, { ...lt }),
-    onSuccess: (_data, variables) => {
-      successCb();
-      queryClient.invalidateQueries({ queryKey: CACHE_LEAVE_TYPE });
-      queryClient.invalidateQueries({
-        queryKey: [...CACHE_LEAVE_TYPE, variables.id],
-      });
-    },
-    onError: () => errorCb(),
-  });
+  return useMutation<FetchResponse<LeaveType>, Error, Partial<LeaveTypeFields>>(
+    {
+      mutationFn: () => updateLeaveType(id),
+      onSuccess: (data) => {
+        successCb();
+        enqueueSnackbar(data.message, { variant: "success" });
+        queryClient.invalidateQueries({ queryKey: CACHE_LEAVE_TYPE });
+        queryClient.invalidateQueries({
+          queryKey: [...CACHE_LEAVE_TYPE, data.data[0].id],
+        });
+      },
+      onError: (err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+        errorCb();
+      },
+    }
+  );
 };
 
 const useDeleteLeaveType = (
@@ -77,14 +82,19 @@ const useDeleteLeaveType = (
   errorCb: () => void
 ) => {
   const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
 
-  return useMutation<DeleteLeaveType, Error>({
+  return useMutation<FetchResponse<string>, Error>({
     mutationFn: () => deleteLeaveType(id),
-    onSuccess: () => {
+    onSuccess: (data) => {
       successCb();
+      enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_LEAVE_TYPE });
     },
-    onError: () => errorCb(),
+    onError: (err) => {
+      enqueueSnackbar(err.message, { variant: "error" });
+      errorCb();
+    },
   });
 };
 

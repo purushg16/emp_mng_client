@@ -9,31 +9,37 @@ import Employee, { EmployeeFields } from "../entities/employee";
 import { LeaveType } from "../entities/leaveType";
 import Leave, { LeaveFields } from "../entities/leave";
 import Login, { ChangePassword } from "../entities/credentials";
+import { EmployeeLogin } from "../entities/auth";
 
 // Profile
-export const getProfile = new APIClient<Employee>(ProfileEmployeeEndpoints.get)
-  .get;
-export const editProfile = new APIClient<Partial<EmployeeFields>>(
+export const getProfile = new APIClient<Employee, Employee>(
+  ProfileEmployeeEndpoints.get
+).get;
+export const editProfile = new APIClient<Partial<EmployeeFields>, Employee>(
   ProfileEmployeeEndpoints.update
 ).put;
 
 // Leave Type
-export const getAllLeaveType = new APIClient<LeaveType>(
+export const getAllLeaveType = new APIClient<LeaveType, LeaveType>(
   leaveTypeEmployeeEndpoints.getAll
 ).getAll;
 
 // Leave
-export const getAllLeave = new APIClient<Leave>(LeaveEmployeeEndpoints.getAll)
-  .getAll;
-export const requestLeave = new APIClient<LeaveFields>(
+export const getAllLeave = new APIClient<Leave, Leave>(
+  LeaveEmployeeEndpoints.getAll
+).getAll;
+export const requestLeave = new APIClient<LeaveFields, Leave>(
   LeaveEmployeeEndpoints.post
 ).post;
-export const getSingleLeave = new APIClient<Leave>(LeaveEmployeeEndpoints.get)
-  .get;
+export const getSingleLeave = new APIClient<Leave, Leave>(
+  LeaveEmployeeEndpoints.get
+).get;
 
 // Auth
-export const employeeLogin = new APIClient<Login>(EmployeeAuthEndpoints.login)
-  .post;
-export const employeeChangePassword = new APIClient<ChangePassword>(
-  EmployeeAuthEndpoints.changePassword
+export const employeeLogin = new APIClient<Login, EmployeeLogin>(
+  EmployeeAuthEndpoints.login
 ).post;
+export const employeeChangePassword = new APIClient<
+  ChangePassword,
+  EmployeeLogin
+>(EmployeeAuthEndpoints.changePassword).post;
