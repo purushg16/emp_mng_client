@@ -13,7 +13,7 @@ import Login, { ChangePassword } from "../entities/credentials";
 // Profile
 export const getProfile = new APIClient<Employee>(ProfileEmployeeEndpoints.get)
   .get;
-export const editProfile = new APIClient<EmployeeFields>(
+export const editProfile = new APIClient<Partial<EmployeeFields>>(
   ProfileEmployeeEndpoints.update
 ).put;
 
@@ -28,8 +28,8 @@ export const getAllLeave = new APIClient<Leave>(LeaveEmployeeEndpoints.getAll)
 export const requestLeave = new APIClient<LeaveFields>(
   LeaveEmployeeEndpoints.post
 ).post;
-export const getLeave = () =>
-  new APIClient<Leave>(LeaveEmployeeEndpoints.get).get;
+export const getSingleLeave = new APIClient<Leave>(LeaveEmployeeEndpoints.get)
+  .get;
 
 // Auth
 export const employeeLogin = new APIClient<Login>(EmployeeAuthEndpoints.login)

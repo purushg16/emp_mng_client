@@ -36,7 +36,7 @@ export default class APIClient<T> {
       .then((res) => res.data);
   };
 
-  put = (subPath: string, data?: Partial<T>, config?: AxiosRequestConfig) => {
+  put = (subPath?: string, data?: Partial<T>, config?: AxiosRequestConfig) => {
     return axiosInstance
       .put<T>(`${this.endpoint}/:${subPath}`, data, config)
       .then((res) => res.data);
