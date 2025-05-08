@@ -28,8 +28,8 @@ export const getAllLeave = new APIClient<Leave>(LeaveEmployeeEndpoints.getAll)
 export const requestLeave = new APIClient<LeaveFields>(
   LeaveEmployeeEndpoints.post
 ).post;
-export const getLeave = (id: string) =>
-  new APIClient<Leave>(LeaveEmployeeEndpoints.get(id)).get;
+export const getLeave = () =>
+  new APIClient<Leave>(LeaveEmployeeEndpoints.get).get;
 
 // Auth
 export const employeeLogin = new APIClient<Login>(EmployeeAuthEndpoints.login)

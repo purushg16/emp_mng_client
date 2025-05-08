@@ -1,9 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 export interface FetchResponse<T> {
+  data: T[];
   success: boolean;
   message: string;
-  data: T[];
+  next: string | null;
 }
 
 const axiosInstance = axios.create({
@@ -29,21 +30,21 @@ export default class APIClient<T> {
       .then((res) => res.data);
   };
 
-  post = (data: Partial<T>, config?: AxiosRequestConfig) => {
+  post = (data?: Partial<T>, config?: AxiosRequestConfig) => {
     return axiosInstance
       .post<T>(this.endpoint, data, config)
       .then((res) => res.data);
   };
 
-  put = (subPath: string, data: Partial<T>, config?: AxiosRequestConfig) => {
+  put = (subPath: string, data?: Partial<T>, config?: AxiosRequestConfig) => {
     return axiosInstance
-      .put<T>(`${this.endpoint}${subPath}`, data, config)
+      .put<T>(`${this.endpoint}/:${subPath}`, data, config)
       .then((res) => res.data);
   };
 
   delete = (subPath: string, config?: AxiosRequestConfig) => {
     return axiosInstance
-      .delete<T>(`${this.endpoint}${subPath}`, config)
+      .delete<T>(`${this.endpoint}/:${subPath}`, config)
       .then((res) => res.data);
   };
 }

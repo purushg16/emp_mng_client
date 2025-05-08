@@ -8,7 +8,7 @@ export const ProfileEmployeeEndpoints = {
 };
 
 export const LeaveEmployeeEndpoints = {
-  get: (id?: string) => `/leave/view${id ? `/${id}` : ""}`,
+  get: `/leave/view`,
   getAll: `/leave/view`,
   post: `/leave/apply`,
 };
