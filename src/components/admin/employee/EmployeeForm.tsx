@@ -1,13 +1,8 @@
 import {
   Button,
-  FormControl,
-  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
   TextField,
   Typography,
@@ -20,6 +15,8 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import * as Yup from "yup";
 import { departments } from "../../../data/admin/deps";
 import type { EmployeeFormValues } from "../../../entities/formValues";
+import SelectInput from "../SelectInput";
+import genders from "../../../data/admin/genders";
 
 type EmployeeFormProps = {
   onClose: () => void;
@@ -168,53 +165,30 @@ const EmployeeForm = ({
             />
           </LocalizationProvider>
 
-          <FormControl
-            size="small"
-            fullWidth
-            error={formik.touched.gender && Boolean(formik.errors.gender)}
-          >
-            <InputLabel>Gender</InputLabel>
-            <Select
-              id="gender"
-              name="gender"
-              value={formik.values.gender}
-              onChange={formik.handleChange}
-              label="Gender"
-            >
-              <MenuItem value="male">Male</MenuItem>
-              <MenuItem value="female">Female</MenuItem>
-              <MenuItem value="other">Other</MenuItem>
-            </Select>
-            {formik.touched.gender && formik.errors.gender && (
-              <FormHelperText>{formik.errors.gender}</FormHelperText>
-            )}
-          </FormControl>
+          <SelectInput
+            label="Gender"
+            data={genders}
+            value={formik.values.gender}
+            onChange={formik.handleChange}
+            isError={formik.touched.gender && Boolean(formik.errors.gender)}
+            error={formik.errors.gender || ""}
+          />
 
-          <FormControl
-            size="small"
-            fullWidth
-            error={
+          <SelectInput
+            label="Department"
+            data={departments.map((dep) => {
+              return {
+                value: dep.code,
+                label: dep.name,
+              };
+            })}
+            value={formik.values.departmentId}
+            onChange={formik.handleChange}
+            isError={
               formik.touched.departmentId && Boolean(formik.errors.departmentId)
             }
-          >
-            <InputLabel>Department</InputLabel>
-            <Select
-              id="departmentId"
-              name="departmentId"
-              value={formik.values.departmentId}
-              onChange={formik.handleChange}
-              label="Department"
-            >
-              {departments.map((dept) => (
-                <MenuItem key={dept.code} value={dept.code}>
-                  {dept.name}
-                </MenuItem>
-              ))}
-            </Select>
-            {formik.touched.departmentId && formik.errors.departmentId && (
-              <FormHelperText>{formik.errors.departmentId}</FormHelperText>
-            )}
-          </FormControl>
+            error={formik.errors.departmentId || ""}
+          />
         </Stack>
 
         <Typography variant="subtitle1" mt={1}>

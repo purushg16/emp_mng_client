@@ -7,7 +7,7 @@ import {
   MdOutlineEventBusy,
 } from "react-icons/md";
 import { RiBuildingFill, RiBuildingLine } from "react-icons/ri";
-import type { PathLabel } from "../../entities/PathLabel";
+import type { PathLabel } from "../../entities/pathLabel";
 import type { ReactNode } from "react";
 
 export interface AdminMenu {
