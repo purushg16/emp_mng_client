@@ -2,6 +2,7 @@ import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import type { DepartmentFormValues } from "../../../entities/formValues";
 import departmentSchema from "../../../data/validations/departmentSchema";
+import { initialDepartmentValues } from "../../../data/admin/initialFormValues";
 
 type DepartmentFormProps = {
   initialValues?: DepartmentFormValues;
@@ -12,7 +13,7 @@ type DepartmentFormProps = {
 const DepartmentForm = ({
   onClose,
   onSubmit,
-  initialValues = { code: "", name: "", shortName: "" },
+  initialValues = initialDepartmentValues,
 }: DepartmentFormProps) => {
   const formik = useFormik<DepartmentFormValues>({
     initialValues,

@@ -4,6 +4,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import React from "react";
 
 type SelectItem = {
   value: string;
@@ -36,7 +37,7 @@ const SelectInput = ({
 }: Props) => {
   return (
     <FormControl size="small" fullWidth error={isError}>
-      <InputLabel>label</InputLabel>
+      <InputLabel>{label}</InputLabel>
       <Select
         id={label}
         name={label}
@@ -55,4 +56,4 @@ const SelectInput = ({
   );
 };
 
-export default SelectInput;
+export default React.memo(SelectInput);

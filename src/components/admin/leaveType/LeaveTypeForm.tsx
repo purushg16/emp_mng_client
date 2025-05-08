@@ -2,6 +2,7 @@ import { TextField, Button, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import type { LeaveTypeFormValues } from "../../../entities/formValues";
 import leaveTypeSchema from "../../../data/validations/leaveTypeSchema";
+import { initialLeaveTypeValues } from "../../../data/admin/initialFormValues";
 
 type NewLeaveTypeModalProps = {
   onClose: () => void;
@@ -12,7 +13,7 @@ type NewLeaveTypeModalProps = {
 const NewLeaveTypeModal = ({
   onClose,
   onSubmit,
-  initialValues = { name: "", description: "" },
+  initialValues = initialLeaveTypeValues,
 }: NewLeaveTypeModalProps) => {
   const formik = useFormik<LeaveTypeFormValues>({
     initialValues: initialValues,

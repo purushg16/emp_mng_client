@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export default Yup.object({
+export default Yup.object().shape({
   code: Yup.string().required("Code is required"),
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Last name is required"),
