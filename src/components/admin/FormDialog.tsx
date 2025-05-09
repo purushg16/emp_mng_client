@@ -13,6 +13,7 @@ type FormDialogProps = {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
+  tag?: string;
   maxWidth?: Breakpoint;
 };
 
@@ -21,12 +22,15 @@ const FormDialog = ({
   description,
   open,
   onClose,
+  tag = "New",
   children,
   maxWidth = "xs",
 }: FormDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth={maxWidth}>
-      <DialogTitle>New {title}</DialogTitle>
+      <DialogTitle>
+        {tag} {title}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ fontSize: "14px", mb: 4 }}>
           {description}

@@ -2,7 +2,7 @@ import { AdminLogin } from "../entities/auth";
 import Login, { ChangePassword } from "../entities/credentials";
 import { Department, DepartmentFields } from "../entities/department";
 import Employee, { EmployeeFields } from "../entities/employee";
-import Leave, { LeaveApproveFields } from "../entities/leave";
+import Leave, { AdminLeave, LeaveApproveFields } from "../entities/leave";
 import { LeaveType, LeaveTypeFields } from "../entities/leaveType";
 import {
   AdminAuthEndpoints,
@@ -67,8 +67,9 @@ export const deleteEmployee = new APIClient<string, string>(
 ).delete;
 
 // Leave
-export const getSingleLeave = new APIClient<Leave>(LeaveAdminEndpoints.get).get;
-export const getAllLeave = new APIClient<Leave>(LeaveAdminEndpoints.getAll)
+export const getSingleLeave = new APIClient<AdminLeave>(LeaveAdminEndpoints.get)
+  .get;
+export const getAllLeave = new APIClient<AdminLeave>(LeaveAdminEndpoints.getAll)
   .getAll;
 export const updateLeave = new APIClient<Partial<LeaveApproveFields>, Leave>(
   LeaveAdminEndpoints.update

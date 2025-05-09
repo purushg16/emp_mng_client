@@ -1,32 +1,36 @@
-import { TextField, Button, Stack, Typography } from "@mui/material";
+import { TextField, Button, Stack, Typography, Alert } from "@mui/material";
 import { useFormik } from "formik";
-import type { LeaveApproveFormValues } from "../../../entities/formValues";
 import { initialLeaveApproveValues } from "../../../data/admin/initialFormValues";
 import leaveSchema from "../../../data/validations/leaveSchema";
 import SelectInput from "../SelectInput";
+import { LeaveApproveFields } from "../../../entities/leave";
 
 type NewLeaveTypeModalProps = {
   onClose: () => void;
-  onSubmit: (values: LeaveApproveFormValues) => void;
-  initialValues?: LeaveApproveFormValues;
+  onSubmit: (values: LeaveApproveFields) => void;
+  preview?: boolean;
+  loading?: boolean;
+  initialValues?: LeaveApproveFields;
 };
 
 const LeaveApproveForm = ({
   onClose,
   onSubmit,
+  preview = false,
+  loading = false,
   initialValues = initialLeaveApproveValues,
 }: NewLeaveTypeModalProps) => {
-  const formik = useFormik<LeaveApproveFormValues>({
+  const formik = useFormik<LeaveApproveFields>({
     initialValues: initialValues,
     validationSchema: leaveSchema,
     onSubmit: (values) => {
-      onSubmit(values);
-      formik.resetForm();
-      onClose();
+      if (!preview) {
+        onSubmit(values);
+        formik.resetForm();
+        onClose();
+      }
     },
   });
-
-  console.log(formik.values.status);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -35,6 +39,7 @@ const LeaveApproveForm = ({
           Action
         </Typography>
         <SelectInput
+          disabled={preview}
           data={[
             { label: "Approved", value: "approved" },
             { label: "Declined", value: "declined" },
@@ -47,21 +52,20 @@ const LeaveApproveForm = ({
         />
 
         <Typography variant="subtitle1" mt={3} gutterBottom>
-          Description
+          Remark
         </Typography>
         <TextField
           fullWidth
-          id="description"
-          name="description"
-          label="Description"
-          value={formik.values.description}
+          id="remark"
+          name="remark"
+          label="Remark"
+          disabled={preview}
+          value={formik.values.remark}
           onChange={formik.handleChange}
           multiline
           rows={3}
-          error={
-            formik.touched.description && Boolean(formik.errors.description)
-          }
-          helperText={formik.touched.description && formik.errors.description}
+          error={formik.touched.remark && Boolean(formik.errors.remark)}
+          helperText={formik.touched.remark && formik.errors.remark}
           slotProps={{
             formHelperText: {
               sx: {
@@ -70,11 +74,23 @@ const LeaveApproveForm = ({
             },
           }}
         />
-        <Stack gap={4} direction="row" justifyContent="end" mt={4}>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button type="submit" variant="contained">
-            Create Leave
-          </Button>
+        <Stack gap={2} direction="row" justifyContent="end" mt={4}>
+          <Button onClick={onClose}>{preview ? "Close" : "Cancel"}</Button>
+          {!preview && (
+            <Button variant="contained" type="submit" loading={loading}>
+              Submit
+            </Button>
+          )}
+          {preview && initialValues && (
+            <Alert
+              severity={
+                initialValues.status === "approved" ? "success" : "error"
+              }
+              sx={{ py: 0, px: 1.5 }}
+            >
+              {initialValues.status === "approved" ? "Approved" : "Declined"}
+            </Alert>
+          )}
         </Stack>
       </Stack>
     </form>

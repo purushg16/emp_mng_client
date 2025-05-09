@@ -1,17 +1,15 @@
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import LeaveTypeTable from "../../components/admin/leaveType/LeaveTypeTable";
 import LeaveTypeActionModal from "../../components/admin/leaveType/AddLeaveTypeModal";
+import LeaveTypeTable from "../../components/admin/leaveType/LeaveTypeTable";
+import PageWrapper from "../../layouts/PageWrapper";
 
 const LeaveTypePage = () => {
   return (
-    <Stack gap={4}>
-      <Stack direction="row" justifyContent="space-between" spacing={2}>
-        <Typography> Manage Leave Types </Typography>
-        <LeaveTypeActionModal action="add" />
-      </Stack>
+    <PageWrapper
+      title="Manage Leave Types"
+      actions={<LeaveTypeActionModal action="add" />}
+    >
       <LeaveTypeTable />
-    </Stack>
+    </PageWrapper>
   );
 };
 

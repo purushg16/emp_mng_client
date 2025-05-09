@@ -1,8 +1,8 @@
-import { Stack, Typography } from "@mui/material";
 import DepartmentTable from "../../components/admin/department/DepartmentTable";
 import DeptActionModal from "../../components/admin/department/DeptActionModal";
 import { useGetAllDepartment } from "../../hooks/admin/useDepartment";
 import { useState } from "react";
+import PageWrapper from "../../layouts/PageWrapper";
 
 const DepartmentPage = () => {
   const [page, setPage] = useState(1);
@@ -11,11 +11,10 @@ const DepartmentPage = () => {
   const { data, isLoading } = useGetAllDepartment(page, pageSize);
 
   return (
-    <Stack gap={4}>
-      <Stack direction="row" justifyContent="space-between" spacing={2}>
-        <Typography> Manage Department </Typography>
-        <DeptActionModal action="add" />
-      </Stack>
+    <PageWrapper
+      title="Manage Department"
+      actions={<DeptActionModal action="add" />}
+    >
       <DepartmentTable
         data={data?.data || []}
         isLoading={isLoading}
@@ -28,7 +27,7 @@ const DepartmentPage = () => {
           setPage(1);
         }}
       />
-    </Stack>
+    </PageWrapper>
   );
 };
 
