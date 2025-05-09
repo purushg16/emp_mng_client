@@ -14,13 +14,13 @@ import {
 import APIClient from "./api-client";
 
 // Department
-export const getAllDepartments = new APIClient<Department, Department>(
+export const getAllDepartments = new APIClient<Department>(
   departmentAdminEndpoints.getAll
 ).getAll;
 export const createDepartment = new APIClient<Department, Department>(
   departmentAdminEndpoints.create
 ).post;
-export const getSingleDepartment = new APIClient<Department, Department>(
+export const getSingleDepartment = new APIClient<Department>(
   departmentAdminEndpoints.get
 ).get;
 export const updateDepartment = new APIClient<
@@ -32,13 +32,13 @@ export const deleteDepartment = new APIClient<string, string>(
 ).delete;
 
 // Leave Type
-export const getAllLeaveType = new APIClient<LeaveType, LeaveType>(
+export const getAllLeaveType = new APIClient<LeaveType>(
   leaveTypeAdminEndpoints.getAll
 ).getAll;
 export const createLeaveType = new APIClient<LeaveType, LeaveType>(
   leaveTypeAdminEndpoints.create
 ).post;
-export const getSingleLeaveType = new APIClient<LeaveType, LeaveType>(
+export const getSingleLeaveType = new APIClient<LeaveType>(
   leaveTypeAdminEndpoints.get
 ).get;
 export const updateLeaveType = new APIClient<
@@ -50,13 +50,13 @@ export const deleteLeaveType = new APIClient<string, string>(
 ).delete;
 
 // Employee
-export const getAllEmployee = new APIClient<Employee, Employee>(
+export const getAllEmployee = new APIClient<Employee>(
   EmployeeAdminEndpoints.getAll
 ).getAll;
 export const createEmployee = new APIClient<Employee, Employee>(
   EmployeeAdminEndpoints.create
 ).post;
-export const getSingleEmployee = new APIClient<Employee, Employee>(
+export const getSingleEmployee = new APIClient<Employee>(
   EmployeeAdminEndpoints.get
 ).get;
 export const updateEmployee = new APIClient<Partial<EmployeeFields>, Employee>(
@@ -67,12 +67,9 @@ export const deleteEmployee = new APIClient<string, string>(
 ).delete;
 
 // Leave
-export const getSingleLeave = new APIClient<Leave, Leave>(
-  LeaveAdminEndpoints.get
-).get;
-export const getAllLeave = new APIClient<Leave, Leave>(
-  LeaveAdminEndpoints.getAll
-).getAll;
+export const getSingleLeave = new APIClient<Leave>(LeaveAdminEndpoints.get).get;
+export const getAllLeave = new APIClient<Leave>(LeaveAdminEndpoints.getAll)
+  .getAll;
 export const updateLeave = new APIClient<Partial<LeaveApproveFields>, Leave>(
   LeaveAdminEndpoints.update
 ).put;

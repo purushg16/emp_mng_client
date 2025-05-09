@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
 });
 
-export default class APIClient<T, R> {
+export default class APIClient<T, R = undefined> {
   endpoint: string;
 
   constructor(endpoint: string) {
