@@ -1,5 +1,5 @@
 import { DepartmentFields } from "../../entities/department";
-import { EmployeeFormValues } from "../../entities/formValues";
+import { EmployeeFields } from "../../entities/employee";
 import { LeaveApproveFields } from "../../entities/leave";
 import { LeaveTypeFields } from "../../entities/leaveType";
 
@@ -9,7 +9,7 @@ export const initialEmployeeValues = {
   lastName: "",
   gender: "male",
   email: "",
-  phone: "",
+  mobile: "",
   country: "",
   password: "",
   confirmPassword: "",
@@ -17,7 +17,7 @@ export const initialEmployeeValues = {
   address: "",
   departmentId: "",
   birthday: new Date(),
-} as EmployeeFormValues;
+} as EmployeeFields;
 
 export const initialLeaveTypeValues = {
   type: "",

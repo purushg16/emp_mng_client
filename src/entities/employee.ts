@@ -1,12 +1,15 @@
 import gender from "./gender";
 
+export type employeeStatus = "active" | "inactive";
+
 export interface EmployeeFields {
   code: string;
   firstName: string;
   lastName: string;
   gender: gender;
   email: string;
-  phone: string;
+  mobile: string;
+  status: employeeStatus;
   country: string;
   password: string;
   confirmPassword: string;

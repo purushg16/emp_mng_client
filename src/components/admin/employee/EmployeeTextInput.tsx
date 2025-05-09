@@ -1,10 +1,10 @@
 import { useField } from "formik";
 import TextField from "@mui/material/TextField";
 import React from "react";
-import { EmployeeFormValues } from "../../../entities/formValues";
+import { EmployeeFields } from "../../../entities/employee";
 
 interface Props {
-  name: keyof EmployeeFormValues;
+  name: keyof EmployeeFields;
   label: string;
   type?: string;
   disabled?: boolean;

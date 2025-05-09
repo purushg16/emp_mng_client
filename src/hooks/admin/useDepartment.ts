@@ -11,7 +11,7 @@ import {
 } from "../../service/admin-client";
 import { FetchResponse } from "../../service/api-client";
 
-const useGetAllDepartment = (page: number, pageSize: number) => {
+const useGetAllDepartment = (page = 1, pageSize = 5) => {
   return useQuery({
     queryKey: [...CACHE_DEPARTMENTS, page, pageSize],
     queryFn: () =>

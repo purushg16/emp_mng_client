@@ -1,4 +1,3 @@
-import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,139 +6,109 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import Employee from "../../../entities/employee";
+import { format } from "date-fns";
+import Stack from "@mui/material/Stack";
+import EmployeeActionModal from "./EmployeeActionModal";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import { Alert } from "@mui/material";
+import EmployeeStatusEditor from "./EmployeeStatusEditor";
 
-interface Column {
-  id: "name" | "code" | "population" | "size" | "density";
-  label: string;
-  minWidth?: number;
-  align?: "right";
-  format?: (value: number) => string;
-}
-
-const columns: readonly Column[] = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toFixed(2),
-  },
+const employeeColumns = [
+  "Sl.No.",
+  "Emp. Code",
+  "Emp. Name",
+  "Department",
+  "Status",
+  "Reg. Date",
+  "Action",
 ];
 
-interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
+interface Props {
+  data: Employee[];
+  isLoading: boolean;
+  page: number;
+  pageSize: number;
+  total: number;
+  onPageChange: (newPage: number) => void;
+  onRowsPerPageChange: (newSize: number) => void;
 }
 
-function createData(
-  name: string,
-  code: string,
-  population: number,
-  size: number
-): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126317000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 17098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
-];
-
-const EmployeeTable = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (_event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
+const EmployeeTable = ({
+  data,
+  isLoading,
+  page,
+  pageSize,
+  total,
+  onPageChange,
+  onRowsPerPageChange,
+}: Props) => {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {employeeColumns.map((column, ind) => (
                 <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  key={ind}
+                  align={column === "Action" ? "center" : undefined}
                 >
-                  {column.label}
+                  {column}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <Box textAlign="center">
+                    <CircularProgress size={24} />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : (
+              data.map((emp, index) => (
+                <TableRow key={emp.code}>
+                  <TableCell>{(page - 1) * pageSize + index + 1}</TableCell>
+                  <TableCell>{emp.code}</TableCell>
+                  <TableCell>
+                    {emp.firstName} {emp.lastName}
+                  </TableCell>
+                  <TableCell>{emp.departmentId}</TableCell>
+                  <TableCell>
+                    <Alert
+                      severity={emp.status === "active" ? "success" : "error"}
+                      sx={{ py: 0, px: 1, width: "max-content" }}
+                    >
+                      {emp.status}
+                    </Alert>
+                  </TableCell>
+                  <TableCell>{format(emp.createdAt, "dd/MM/yyyy")}</TableCell>
+                  <TableCell>
+                    <Stack justifyContent="center" alignItems="center">
+                      <EmployeeActionModal action="edit" data={emp} />
+                      <EmployeeStatusEditor id={emp.id} status={emp.status} />
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        count={total}
+        page={page - 1}
+        rowsPerPage={pageSize}
+        onPageChange={(_, newPage) => onPageChange(newPage + 1)}
+        onRowsPerPageChange={(e) =>
+          onRowsPerPageChange(parseInt(e.target.value))
+        }
+        rowsPerPageOptions={[5, 10, 25]}
       />
     </Paper>
   );

@@ -1,42 +1,40 @@
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import React from "react";
-import { departments } from "../../../data/admin/deps";
 import genders from "../../../data/admin/genders";
 import { initialEmployeeValues } from "../../../data/admin/initialFormValues";
-import employeeSchema from "../../../data/validations/employeeSchema";
-import type {
-  EmployeeFormValues,
-  EmployeeProfileFormValues,
-} from "../../../entities/formValues";
+import { editEmployeeSchema } from "../../../data/validations/employeeSchema";
+import { EmployeeFields } from "../../../entities/employee";
+import type { EmployeeProfileFormValues } from "../../../entities/formValues";
 import SelectInput from "../SelectInput";
+import EmpDeptSelector from "./EmpDeptSelector";
 import EmployeeDOBPicker from "./EmployeeDOBPicker";
 import EmployeePasswordInput from "./EmployeePasswordInput";
 import EmployeeTextField from "./EmployeeTextInput";
 
 type EmployeeFormProps = {
   onClose: () => void;
-  onSubmit: (values: EmployeeFormValues | EmployeeProfileFormValues) => void;
+  onSubmit: (values: EmployeeFields | EmployeeProfileFormValues) => void;
+  loading?: boolean;
   preview?: boolean;
-  action?: "create" | "edit";
+  action?: "add" | "edit";
   isEmployee?: boolean;
-  initialValues?: EmployeeFormValues | EmployeeProfileFormValues;
+  initialValues?: EmployeeFields | EmployeeProfileFormValues;
 };
 
 const EmployeeForm = ({
-  action = "create",
+  action = "add",
   onClose,
   onSubmit,
+  loading = false,
   preview = false,
   isEmployee = false,
   initialValues = initialEmployeeValues,
 }: EmployeeFormProps) => {
   const formik = useFormik({
     initialValues,
-    validationSchema: employeeSchema,
+    validationSchema: editEmployeeSchema,
     onSubmit,
-    validateOnChange: false,
-    validateOnBlur: true,
   });
 
   const handleCancel = () => {
@@ -48,7 +46,9 @@ const EmployeeForm = ({
     <FormikProvider value={formik}>
       <form onSubmit={formik.handleSubmit} noValidate>
         <Grid container spacing={0}>
-          <Typography variant="subtitle1">Name</Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            Name
+          </Typography>
           <Stack width="100%" direction="row" gap={2}>
             <EmployeeTextField
               label="First Name"
@@ -63,16 +63,17 @@ const EmployeeForm = ({
               disabled={preview}
             />
           </Stack>
-          {!isEmployee && (
-            <>
-              <Typography variant="subtitle1" mt={1}>
-                Security
-              </Typography>
-              <EmployeePasswordInput />
-            </>
-          )}
+          {!isEmployee ||
+            (action === "add" && (
+              <>
+                <Typography variant="subtitle1" mt={1} gutterBottom>
+                  Security
+                </Typography>
+                <EmployeePasswordInput />
+              </>
+            ))}
 
-          <Typography variant="subtitle1" mt={1}>
+          <Typography variant="subtitle1" mt={1} gutterBottom>
             Basics
           </Typography>
 
@@ -89,15 +90,9 @@ const EmployeeForm = ({
             />
 
             {!isEmployee && (
-              <SelectInput
+              <EmpDeptSelector
                 label="department"
                 name="departmentId"
-                data={departments.map((dep) => {
-                  return {
-                    value: dep.code,
-                    label: dep.name,
-                  };
-                })}
                 value={formik.values.departmentId}
                 onChange={formik.handleChange}
                 isError={
@@ -110,19 +105,19 @@ const EmployeeForm = ({
             )}
           </Stack>
 
-          <Typography variant="subtitle1" mt={1}>
+          <Typography variant="subtitle1" mt={1} gutterBottom>
             Contact
           </Typography>
           <Stack width="100%" direction="row" gap={2}>
             <EmployeeTextField name="email" label="Email" disabled={preview} />
             <EmployeeTextField
-              name="phone"
+              name="mobile"
               label="Phone Number"
               disabled={preview}
             />
           </Stack>
 
-          <Typography variant="subtitle1" mt={1}>
+          <Typography variant="subtitle1" mt={1} gutterBottom>
             Address
           </Typography>
           <Stack width="100%" direction="row" gap={2}>
@@ -162,9 +157,11 @@ const EmployeeForm = ({
                     variant="contained"
                     type="submit"
                     color={isEmployee ? "success" : "primary"}
+                    loading={loading}
+                    sx={{ textTransform: "capitalize" }}
                   >
                     {isEmployee && "Update Profile"}
-                    {!isEmployee && action + "Employee"}
+                    {!isEmployee && action.toUpperCase() + " Employee"}
                   </Button>
                 </>
               )}

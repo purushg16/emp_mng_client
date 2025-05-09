@@ -1,10 +1,4 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ms from "ms";
 import { CACHE_EMPLOYEES } from "../../data/admin/cache_key";
 import Employee, { EmployeeFields } from "../../entities/employee";
@@ -17,22 +11,18 @@ import {
 } from "../../service/admin-client";
 import { FetchResponse } from "../../service/api-client";
 
-const useGetAllEmployee = (itemsPerPage = 5) => {
-  return useInfiniteQuery({
-    queryKey: CACHE_EMPLOYEES,
-    queryFn: ({ pageParam = 1 }) =>
+const useGetAllEmployee = (page = 1, pageSize = 5) =>
+  useQuery({
+    queryKey: [...CACHE_EMPLOYEES, page, pageSize],
+    queryFn: () =>
       getAllEmployee({
         params: {
-          page: pageParam,
-          itemsPerPage: itemsPerPage,
+          page,
+          page_size: pageSize,
         },
       }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.next ? allPages.length + 1 : undefined,
-    staleTime: ms("24h"),
+    placeholderData: (previousData) => previousData,
   });
-};
 
 const useGetSingleEmployee = (id: string) => {
   return useQuery<Employee, Error>({
@@ -44,44 +34,36 @@ const useGetSingleEmployee = (id: string) => {
 
 const useCreateEmployee = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: createEmployee,
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (successCb) successCb();
-      enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_EMPLOYEES });
-      queryClient.invalidateQueries({
-        queryKey: [...CACHE_EMPLOYEES, data.data[0].id],
-      });
     },
-    onError: (err) => {
-      enqueueSnackbar(err.message, { variant: "error" });
+    onError: () => {
       if (errorCb) errorCb();
     },
   });
 };
 
 const useEditEmployee = (
-  empId: string,
+  empId?: string,
   successCb?: () => void,
   errorCb?: () => void
 ) => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation<FetchResponse<Employee>, Error, Partial<EmployeeFields>>({
     mutationFn: (data) => updateEmployee(empId, data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_EMPLOYEES });
       queryClient.invalidateQueries({
-        queryKey: [...CACHE_EMPLOYEES, data.data[0].id],
+        queryKey: [...CACHE_EMPLOYEES, empId],
       });
     },
-    onError: (err) => {
-      enqueueSnackbar(err.message, { variant: "error" });
+    onError: () => {
       if (errorCb) errorCb();
     },
   });
@@ -89,7 +71,6 @@ const useEditEmployee = (
 
 const useDeleteEmployee = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: deleteEmployee,
@@ -97,8 +78,7 @@ const useDeleteEmployee = (successCb?: () => void, errorCb?: () => void) => {
       if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_EMPLOYEES });
     },
-    onError: (err) => {
-      enqueueSnackbar(err.message, { variant: "error" });
+    onError: () => {
       if (errorCb) errorCb();
     },
   });
