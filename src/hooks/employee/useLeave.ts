@@ -38,7 +38,7 @@ const useGetSingleLeave = (id: string) =>
     staleTime: ms("24h"),
   });
 
-const usePostLeave = (successCb: () => void, errorCb: () => void) => {
+const usePostLeave = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,11 +49,11 @@ const usePostLeave = (successCb: () => void, errorCb: () => void) => {
       queryClient.invalidateQueries({
         queryKey: [CACHE_LEAVE],
       });
-      successCb();
+      if (successCb) successCb();
     },
     onError: (err) => {
       enqueueSnackbar(err.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };

@@ -2,8 +2,8 @@ import {
   DepartmentFormValues,
   EmployeeFormValues,
   LeaveApproveFormValues,
-  LeaveTypeFormValues,
 } from "../../entities/formValues";
+import { LeaveTypeFields } from "../../entities/leaveType";
 
 export const initialEmployeeValues = {
   code: "",
@@ -22,9 +22,9 @@ export const initialEmployeeValues = {
 } as EmployeeFormValues;
 
 export const initialLeaveTypeValues = {
-  name: "",
+  type: "",
   description: "",
-} as LeaveTypeFormValues;
+} as LeaveTypeFields;
 
 export const initialLeaveApproveValues = {
   status: "approved",

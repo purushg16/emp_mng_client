@@ -40,8 +40,8 @@ const useGetSingleLeave = (id: string) =>
 
 const useUpdateLeave = (
   id: string,
-  successCb: () => void,
-  errorCb: () => void
+  successCb?: () => void,
+  errorCb?: () => void
 ) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -49,7 +49,7 @@ const useUpdateLeave = (
   return useMutation<FetchResponse<Leave>, Error, Partial<LeaveApproveFields>>({
     mutationFn: (data) => updateLeave(id, data),
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_LEAVE });
       queryClient.invalidateQueries({
@@ -58,7 +58,7 @@ const useUpdateLeave = (
     },
     onError: (err) => {
       enqueueSnackbar(err.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };

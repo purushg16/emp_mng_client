@@ -1,21 +1,25 @@
 import { TextField, Button, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import type { LeaveTypeFormValues } from "../../../entities/formValues";
 import leaveTypeSchema from "../../../data/validations/leaveTypeSchema";
 import { initialLeaveTypeValues } from "../../../data/admin/initialFormValues";
+import { LeaveTypeFields } from "../../../entities/leaveType";
 
 type NewLeaveTypeModalProps = {
   onClose: () => void;
-  onSubmit: (values: LeaveTypeFormValues) => void;
-  initialValues?: LeaveTypeFormValues;
+  onSubmit: (values: LeaveTypeFields) => void;
+  loading?: boolean;
+  isEditing?: boolean;
+  initialValues?: LeaveTypeFields;
 };
 
 const NewLeaveTypeModal = ({
   onClose,
   onSubmit,
+  loading = false,
+  isEditing = false,
   initialValues = initialLeaveTypeValues,
 }: NewLeaveTypeModalProps) => {
-  const formik = useFormik<LeaveTypeFormValues>({
+  const formik = useFormik<LeaveTypeFields>({
     initialValues: initialValues,
     validationSchema: leaveTypeSchema,
     onSubmit: (values) => {
@@ -35,13 +39,13 @@ const NewLeaveTypeModal = ({
           fullWidth
           size="small"
           variant="outlined"
-          id="name"
-          name="name"
+          id="type"
+          name="type"
           label="Leave Type Name"
-          value={formik.values.name}
+          value={formik.values.type}
           onChange={formik.handleChange}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
+          error={formik.touched.type && Boolean(formik.errors.type)}
+          helperText={formik.touched.type && formik.errors.type}
           slotProps={{
             formHelperText: {
               sx: {
@@ -75,10 +79,11 @@ const NewLeaveTypeModal = ({
             },
           }}
         />
-        <Stack gap={4} direction="row" justifyContent="end" mt={4}>
+        <Stack gap={2} direction="row" justifyContent="end" mt={4}>
           <Button onClick={onClose}>Cancel</Button>
-          <Button type="submit" variant="contained">
-            Create Leave Type
+          <Button type="submit" variant="contained" loading={loading}>
+            {isEditing ? "Create Leave Type" : "Update"}
+            {loading && "..."}
           </Button>
         </Stack>
       </Stack>

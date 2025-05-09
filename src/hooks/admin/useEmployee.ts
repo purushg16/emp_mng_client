@@ -42,14 +42,14 @@ const useGetSingleEmployee = (id: string) => {
   });
 };
 
-const useCreateEmployee = (successCb: () => void, errorCb: () => void) => {
+const useCreateEmployee = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: createEmployee,
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_EMPLOYEES });
       queryClient.invalidateQueries({
@@ -58,15 +58,15 @@ const useCreateEmployee = (successCb: () => void, errorCb: () => void) => {
     },
     onError: (err) => {
       enqueueSnackbar(err.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };
 
 const useEditEmployee = (
   empId: string,
-  successCb: () => void,
-  errorCb: () => void
+  successCb?: () => void,
+  errorCb?: () => void
 ) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -74,7 +74,7 @@ const useEditEmployee = (
   return useMutation<FetchResponse<Employee>, Error, Partial<EmployeeFields>>({
     mutationFn: (data) => updateEmployee(empId, data),
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_EMPLOYEES });
       queryClient.invalidateQueries({
         queryKey: [...CACHE_EMPLOYEES, data.data[0].id],
@@ -82,24 +82,24 @@ const useEditEmployee = (
     },
     onError: (err) => {
       enqueueSnackbar(err.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };
 
-const useDeleteEmployee = (successCb: () => void, errorCb: () => void) => {
+const useDeleteEmployee = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: deleteEmployee,
     onSuccess: () => {
-      successCb();
+      if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_EMPLOYEES });
     },
     onError: (err) => {
       enqueueSnackbar(err.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };

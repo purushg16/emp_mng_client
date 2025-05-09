@@ -20,7 +20,7 @@ export default class APIClient<T, R = undefined> {
 
   get = (subPath = "", config?: AxiosRequestConfig) => {
     return axiosInstance
-      .get<T>(`${this.endpoint}/:${subPath}`, config)
+      .get<T>(`${this.endpoint}/${subPath}`, config)
       .then((res) => res.data);
   };
 
@@ -38,13 +38,13 @@ export default class APIClient<T, R = undefined> {
 
   put = (subPath = "", data?: Partial<T>, config?: AxiosRequestConfig) => {
     return axiosInstance
-      .put<FetchResponse<R>>(`${this.endpoint}/:${subPath}`, data, config)
+      .put<FetchResponse<R>>(`${this.endpoint}/${subPath}`, data, config)
       .then((res) => res.data);
   };
 
   delete = (subPath: string, config?: AxiosRequestConfig) => {
     return axiosInstance
-      .delete<FetchResponse<R>>(`${this.endpoint}/:${subPath}`, config)
+      .delete<FetchResponse<R>>(`${this.endpoint}/${subPath}`, config)
       .then((res) => res.data);
   };
 }

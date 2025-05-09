@@ -4,11 +4,6 @@ export type DepartmentFormValues = {
   shortName: string;
 };
 
-export type LeaveTypeFormValues = {
-  name: string;
-  description: string;
-};
-
 export type LeaveApproveFormValues = {
   status: "approved" | "declined";
   description?: string;

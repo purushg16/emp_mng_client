@@ -28,14 +28,14 @@ const useGetSingleLeaveType = (id: string) => {
   });
 };
 
-const useCreateLeaveType = (successCb: () => void, errorCb: () => void) => {
+const useCreateLeaveType = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   return useMutation<FetchResponse<LeaveType>, Error, LeaveTypeFields>({
     mutationFn: createLeaveType,
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_LEAVE_TYPE });
       queryClient.invalidateQueries({
@@ -44,15 +44,15 @@ const useCreateLeaveType = (successCb: () => void, errorCb: () => void) => {
     },
     onError: (err) => {
       enqueueSnackbar(err.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };
 
 const useEditLeaveType = (
-  id: string,
-  successCb: () => void,
-  errorCb: () => void
+  id?: string,
+  successCb?: () => void,
+  errorCb?: () => void
 ) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -61,7 +61,7 @@ const useEditLeaveType = (
     {
       mutationFn: () => updateLeaveType(id),
       onSuccess: (data) => {
-        successCb();
+        if (successCb) successCb();
         enqueueSnackbar(data.message, { variant: "success" });
         queryClient.invalidateQueries({ queryKey: CACHE_LEAVE_TYPE });
         queryClient.invalidateQueries({
@@ -70,30 +70,26 @@ const useEditLeaveType = (
       },
       onError: (err) => {
         enqueueSnackbar(err.message, { variant: "error" });
-        errorCb();
+        if (errorCb) errorCb();
       },
     }
   );
 };
 
-const useDeleteLeaveType = (
-  id: string,
-  successCb: () => void,
-  errorCb: () => void
-) => {
+const useDeleteLeaveType = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
-  return useMutation<FetchResponse<string>, Error>({
-    mutationFn: () => deleteLeaveType(id),
+  return useMutation<FetchResponse<string>, Error, string>({
+    mutationFn: (id) => deleteLeaveType(id),
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_LEAVE_TYPE });
     },
     onError: (err) => {
       enqueueSnackbar(err.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };

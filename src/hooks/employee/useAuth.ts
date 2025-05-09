@@ -52,17 +52,20 @@ const useEmployeeChangePassword = (credentials: ChangePassword) => {
   });
 };
 
-const useEmployeeEditProfile = (successCb: () => void, errorCb: () => void) => {
+const useEmployeeEditProfile = (
+  successCb?: () => void,
+  errorCb?: () => void
+) => {
   const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: editProfile,
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       enqueueSnackbar(data.message, { variant: "success" });
     },
     onError: (err) => {
-      errorCb();
+      if (errorCb) errorCb();
       enqueueSnackbar(err.message, { variant: "error" });
     },
   });

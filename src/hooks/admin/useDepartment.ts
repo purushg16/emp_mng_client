@@ -42,14 +42,14 @@ const useGetSingleDepartment = (id: string) => {
   });
 };
 
-const useCreateDepartment = (successCb: () => void, errorCb: () => void) => {
+const useCreateDepartment = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: createDepartment,
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
       queryClient.invalidateQueries({
         queryKey: [...CACHE_DEPARTMENTS, data.data[0].id],
@@ -57,7 +57,7 @@ const useCreateDepartment = (successCb: () => void, errorCb: () => void) => {
       enqueueSnackbar(data.message, { variant: "success" });
     },
     onError: (error) => {
-      errorCb();
+      if (errorCb) errorCb();
       enqueueSnackbar(error.message, { variant: "error" });
     },
   });
@@ -65,8 +65,8 @@ const useCreateDepartment = (successCb: () => void, errorCb: () => void) => {
 
 const useEditDepartment = (
   id: string,
-  successCb: () => void,
-  errorCb: () => void
+  successCb?: () => void,
+  errorCb?: () => void
 ) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -78,7 +78,7 @@ const useEditDepartment = (
   >({
     mutationFn: (data) => updateDepartment(id, data),
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
       queryClient.invalidateQueries({
         queryKey: [...CACHE_DEPARTMENTS, data.data[0].id],
@@ -87,25 +87,25 @@ const useEditDepartment = (
     },
     onError: (error) => {
       enqueueSnackbar(error.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };
 
-const useDeleteDepartment = (successCb: () => void, errorCb: () => void) => {
+const useDeleteDepartment = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: deleteDepartment,
     onSuccess: (data) => {
-      successCb();
+      if (successCb) successCb();
       enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
     },
     onError: (error) => {
       enqueueSnackbar(error.message, { variant: "error" });
-      errorCb();
+      if (errorCb) errorCb();
     },
   });
 };
