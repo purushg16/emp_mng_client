@@ -8,6 +8,6 @@ export interface DeleteDepartment {
 }
 
 export interface Department extends DepartmentFields {
-  id: number;
+  id: string;
   createdAt: Date;
 }

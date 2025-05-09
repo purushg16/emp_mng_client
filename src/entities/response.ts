@@ -10,6 +10,6 @@ interface Error {
   error: string;
 }
 
-export type SuccessResponse = AxiosResponse<FetchResponse<string>>;
+export type SuccessResponse = FetchResponse<string>;
 export type ErrorResponse = AxiosError<Error>;
 export type TokenResponse = AxiosResponse<Token>;

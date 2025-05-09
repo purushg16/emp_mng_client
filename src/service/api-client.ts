@@ -6,6 +6,10 @@ export interface FetchResponse<T> {
   success: boolean;
   message: string;
   next: string | null;
+  prev: string | null;
+  page: number;
+  page_size: number;
+  total: number;
 }
 
 export default class APIClient<T, R = undefined> {

@@ -37,7 +37,7 @@ const client = new QueryClient({
           }
         } else if (data) {
           const res = data as SuccessResponse;
-          enqueueSnackbar(res.data.message, {
+          enqueueSnackbar(res.message, {
             variant: "success",
           });
         }

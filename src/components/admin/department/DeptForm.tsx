@@ -1,21 +1,25 @@
 import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import type { DepartmentFormValues } from "../../../entities/formValues";
 import departmentSchema from "../../../data/validations/departmentSchema";
 import { initialDepartmentValues } from "../../../data/admin/initialFormValues";
+import { DepartmentFields } from "../../../entities/department";
 
 type DepartmentFormProps = {
-  initialValues?: DepartmentFormValues;
   onClose: () => void;
-  onSubmit: (values: DepartmentFormValues) => void;
+  onSubmit: (values: DepartmentFields) => void;
+  loading?: boolean;
+  isEditing?: boolean;
+  initialValues?: DepartmentFields;
 };
 
 const DepartmentForm = ({
   onClose,
   onSubmit,
+  loading = false,
+  isEditing = false,
   initialValues = initialDepartmentValues,
 }: DepartmentFormProps) => {
-  const formik = useFormik<DepartmentFormValues>({
+  const formik = useFormik<DepartmentFields>({
     initialValues,
     validationSchema: departmentSchema,
     onSubmit,
@@ -104,8 +108,9 @@ const DepartmentForm = ({
         <Grid size={12}>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose}> Cancel </Button>
-            <Button variant="contained" type="submit">
-              Create Department
+            <Button variant="contained" type="submit" loading={loading}>
+              {isEditing ? "Update" : "Create Department"}
+              {loading && "..."}
             </Button>
           </Stack>
         </Grid>

@@ -1,5 +1,5 @@
+import { DepartmentFields } from "../../entities/department";
 import {
-  DepartmentFormValues,
   EmployeeFormValues,
   LeaveApproveFormValues,
 } from "../../entities/formValues";
@@ -35,4 +35,4 @@ export const initialDepartmentValues = {
   code: "",
   name: "",
   shortName: "",
-} as DepartmentFormValues;
+} as DepartmentFields;

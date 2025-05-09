@@ -1,11 +1,5 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ms from "ms";
-import { useSnackbar } from "notistack";
 import { CACHE_DEPARTMENTS } from "../../data/admin/cache_key";
 import { Department, DepartmentFields } from "../../entities/department";
 import {
@@ -17,20 +11,17 @@ import {
 } from "../../service/admin-client";
 import { FetchResponse } from "../../service/api-client";
 
-const useGetAllDepartment = (itemsPerPage = 5) => {
-  return useInfiniteQuery({
-    queryKey: CACHE_DEPARTMENTS,
-    queryFn: ({ pageParam = 1 }) =>
+const useGetAllDepartment = (page: number, pageSize: number) => {
+  return useQuery({
+    queryKey: [...CACHE_DEPARTMENTS, page, pageSize],
+    queryFn: () =>
       getAllDepartments({
         params: {
-          page: pageParam,
-          itemsPerPage: itemsPerPage,
+          page,
+          page_size: pageSize,
         },
       }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.next ? allPages.length + 1 : undefined,
-    staleTime: ms("24h"),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -44,32 +35,25 @@ const useGetSingleDepartment = (id: string) => {
 
 const useCreateDepartment = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: createDepartment,
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
-      queryClient.invalidateQueries({
-        queryKey: [...CACHE_DEPARTMENTS, data.data[0].id],
-      });
-      enqueueSnackbar(data.message, { variant: "success" });
     },
-    onError: (error) => {
+    onError: () => {
       if (errorCb) errorCb();
-      enqueueSnackbar(error.message, { variant: "error" });
     },
   });
 };
 
 const useEditDepartment = (
-  id: string,
+  id?: string,
   successCb?: () => void,
   errorCb?: () => void
 ) => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation<
     FetchResponse<Department>,
@@ -77,16 +61,14 @@ const useEditDepartment = (
     Partial<DepartmentFields>
   >({
     mutationFn: (data) => updateDepartment(id, data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (successCb) successCb();
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
       queryClient.invalidateQueries({
-        queryKey: [...CACHE_DEPARTMENTS, data.data[0].id],
+        queryKey: [...CACHE_DEPARTMENTS, id],
       });
-      enqueueSnackbar(data.message, { variant: "success" });
     },
-    onError: (error) => {
-      enqueueSnackbar(error.message, { variant: "error" });
+    onError: () => {
       if (errorCb) errorCb();
     },
   });
@@ -94,17 +76,14 @@ const useEditDepartment = (
 
 const useDeleteDepartment = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: deleteDepartment,
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (successCb) successCb();
-      enqueueSnackbar(data.message, { variant: "success" });
       queryClient.invalidateQueries({ queryKey: CACHE_DEPARTMENTS });
     },
-    onError: (error) => {
-      enqueueSnackbar(error.message, { variant: "error" });
+    onError: () => {
       if (errorCb) errorCb();
     },
   });
