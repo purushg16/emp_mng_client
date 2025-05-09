@@ -8,15 +8,14 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import router from "./router/router.tsx";
 import { SnackbarProvider } from "notistack";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import client from "./router/queryClient.ts";
 
 const darkTheme = createTheme({
   palette: {
     mode: "light",
   },
 });
-
-const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -25,7 +24,7 @@ createRoot(document.getElementById("root")!).render(
         autoHideDuration={5000}
         anchorOrigin={{ horizontal: "center", vertical: "top" }}
       >
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={client}>
           <RouterProvider router={router} />
         </QueryClientProvider>
       </SnackbarProvider>

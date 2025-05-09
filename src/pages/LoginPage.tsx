@@ -9,23 +9,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { useFormik } from "formik";
-import authValidator from "../data/validations/authValidator";
+import { useLoginLogic } from "../hooks/useLoginLogic";
 
 const LoginPage = () => {
-  const [role, setRole] = useState<"admin" | "employee">("employee");
-
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validationSchema: authValidator,
-    onSubmit: (values) => {
-      console.log({ ...values, role });
-    },
-  });
+  const { formik, role, setRole, isLoading } = useLoginLogic();
 
   return (
     <Stack direction="row" width="100%" height="100vh" minHeight="100dvh">
@@ -84,7 +71,12 @@ const LoginPage = () => {
             sx={{ mb: 2 }}
           />
 
-          <Button type="submit" variant="contained" fullWidth>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            loading={isLoading}
+          >
             Login
           </Button>
         </Box>

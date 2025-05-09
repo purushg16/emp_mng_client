@@ -40,6 +40,6 @@ export const LeaveAdminEndpoints = {
 };
 
 export const AdminAuthEndpoints = {
-  login: `${adminBase}/admin/auth/login`,
-  changePassword: `${adminBase}/admin/change-password`,
+  login: `${adminBase}/auth/login`,
+  changePassword: `${adminBase}/change-password`,
 };

@@ -78,6 +78,6 @@ export const updateLeave = new APIClient<Partial<LeaveApproveFields>, Leave>(
 export const adminLogin = new APIClient<Login, AdminLogin>(
   AdminAuthEndpoints.login
 ).post;
-export const employeeChangePassword = new APIClient<ChangePassword, AdminLogin>(
+export const adminChangePassword = new APIClient<ChangePassword, AdminLogin>(
   AdminAuthEndpoints.changePassword
 ).post;

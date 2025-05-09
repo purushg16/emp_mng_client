@@ -1,12 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { adminLogin, employeeChangePassword } from "../../service/admin-client";
 import { EmployeeLogin } from "../../entities/auth";
 import Login, { ChangePassword } from "../../entities/credentials";
 import { CACHE_PROFILE } from "../../data/employee/cache_key";
 import ms from "ms";
-import { editProfile, getProfile } from "../../service/employee-client";
+import {
+  editProfile,
+  employeeLogin,
+  getProfile,
+  employeeChangePassword,
+} from "../../service/employee-client";
 import { useSnackbar } from "notistack";
+import { FetchResponse } from "../../service/api-client";
 
 const useGetEmployeeProfile = () =>
   useQuery({
@@ -15,36 +20,35 @@ const useGetEmployeeProfile = () =>
     staleTime: ms("24h"),
   });
 
-const useEmployeeLogin = (credentials: Login) => {
+const useEmployeeLogin = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  return useMutation({
-    mutationFn: () => adminLogin(credentials),
-    onSuccess: (_data, variables: EmployeeLogin) => {
+  return useMutation<FetchResponse<EmployeeLogin>, Error, Login>({
+    mutationFn: (credentials) => employeeLogin(credentials),
+    onSuccess: (data) => {
       enqueueSnackbar("Login Successfull", { variant: "success" });
 
       localStorage.setItem(
         import.meta.env.VITE_REACT_APP_EMP_TOKEN,
-        variables.token
+        data.data[0].token
       );
       navigate("/admin");
     },
-    onError: (error) => enqueueSnackbar(error.message, { variant: "error" }),
   });
 };
 
-const useEmployeeChangePassword = (credentials: ChangePassword) => {
+const useEmployeeChangePassword = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  return useMutation({
-    mutationFn: () => employeeChangePassword(credentials),
-    onSuccess: (_data, variables: EmployeeLogin) => {
+  return useMutation<FetchResponse<EmployeeLogin>, Error, ChangePassword>({
+    mutationFn: (credentials) => employeeChangePassword(credentials),
+    onSuccess: (data) => {
       enqueueSnackbar("Password Changed Successfully", { variant: "success" });
       localStorage.setItem(
         import.meta.env.VITE_REACT_APP_EMP_TOKEN,
-        variables.token
+        data.data[0].token
       );
       navigate("/admin");
     },

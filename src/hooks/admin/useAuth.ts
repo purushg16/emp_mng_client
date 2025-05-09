@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { adminLogin, employeeChangePassword } from "../../service/admin-client";
+import { adminLogin, adminChangePassword } from "../../service/admin-client";
 import { AdminLogin } from "../../entities/auth";
 import Login, { ChangePassword } from "../../entities/credentials";
 import { useSnackbar } from "notistack";
 import { FetchResponse } from "../../service/api-client";
+import token_key from "../../data/token_key";
 
 const useAdminLogin = () => {
   const navigate = useNavigate();
@@ -13,10 +14,7 @@ const useAdminLogin = () => {
   return useMutation<FetchResponse<AdminLogin>, Error, Login>({
     mutationFn: (data) => adminLogin(data),
     onSuccess: (data) => {
-      localStorage.setItem(
-        import.meta.env.VITE_REACT_APP_ADMIN_TOKEN,
-        data.data[0].token
-      );
+      localStorage.setItem(token_key.admin, data.data[0].token);
       enqueueSnackbar("Login Successfull", { variant: "success" });
       navigate("/admin");
     },
@@ -29,12 +27,9 @@ const useAdminChangePassword = (credentials: ChangePassword) => {
   const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
-    mutationFn: () => employeeChangePassword(credentials),
+    mutationFn: () => adminChangePassword(credentials),
     onSuccess: (data) => {
-      localStorage.setItem(
-        import.meta.env.VITE_REACT_APP_ADMIN_TOKEN,
-        data.data[0].token
-      );
+      localStorage.setItem(token_key.admin, data.data[0].token);
       enqueueSnackbar("Password Changed Successfully", { variant: "success" });
       navigate("/admin");
     },

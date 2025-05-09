@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
+import axiosInstance from "./axiosInstance";
 
 export interface FetchResponse<T> {
   data: T[];
@@ -6,10 +7,6 @@ export interface FetchResponse<T> {
   message: string;
   next: string | null;
 }
-
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-});
 
 export default class APIClient<T, R = undefined> {
   endpoint: string;
