@@ -1,16 +1,16 @@
 export const leaveTypeEmployeeEndpoints = {
-  getAll: `/leaveType/getAll`,
+  getAll: `/employee/leaveType/getAll`,
 };
 
 export const ProfileEmployeeEndpoints = {
-  get: `/profile/get`,
-  update: `/profile/update`,
+  get: `/employee/profile/get`,
+  update: `/employee/profile/update`,
 };
 
 export const LeaveEmployeeEndpoints = {
-  get: `/leave/view`,
-  getAll: `/leave/view`,
-  post: `/leave/apply`,
+  get: `/employee/leave/view`,
+  getAll: `/employee/leave/view`,
+  post: `/employee/leave/apply`,
 };
 
 export const EmployeeAuthEndpoints = {

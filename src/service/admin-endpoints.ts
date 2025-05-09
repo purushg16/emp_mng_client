@@ -1,43 +1,45 @@
+const adminBase = "/admin";
+
 export const departmentAdminEndpoints = {
-  base: `/departments`,
-  getAll: `/departments/getAll`,
-  create: `/departments/create`,
-  get: `/departments/get`,
-  update: `/departments/update`,
-  delete: `/departments/delete`,
+  base: `${adminBase}/departments`,
+  getAll: `${adminBase}/departments/getAll`,
+  create: `${adminBase}/departments/create`,
+  get: `${adminBase}/departments/get`,
+  update: `${adminBase}/departments/update`,
+  delete: `${adminBase}/departments/delete`,
 };
 
 export const leaveTypeAdminEndpoints = {
-  base: `/leaveType`,
-  getAll: `/leaveType/getAll`,
-  create: `/leaveType/create`,
-  get: `/leaveType/get`,
-  update: `/leaveType/update`,
-  delete: `/leaveType/delete`,
+  base: `${adminBase}/leaveType`,
+  getAll: `${adminBase}/leaveType/getAll`,
+  create: `${adminBase}/leaveType/create`,
+  get: `${adminBase}/leaveType/get`,
+  update: `${adminBase}/leaveType/update`,
+  delete: `${adminBase}/leaveType/delete`,
 };
 
 export const EmployeeAdminEndpoints = {
-  base: `/employee`,
-  getAll: `/employee/getAll`,
-  create: `/employee/create`,
-  get: `/employee/get`,
-  update: `/employee/update`,
-  delete: `/employee/delete`,
+  base: `${adminBase}/employee`,
+  getAll: `${adminBase}/employee/getAll`,
+  create: `${adminBase}/employee/create`,
+  get: `${adminBase}/employee/get`,
+  update: `${adminBase}/employee/update`,
+  delete: `${adminBase}/employee/delete`,
 };
 
 export const AuthAdminEndpoints = {
-  login: `/auth/login`,
-  changePassword: `/auth/change-password`,
+  login: `${adminBase}/auth/login`,
+  changePassword: `${adminBase}/auth/change-password`,
 };
 
 export const LeaveAdminEndpoints = {
-  base: `/leave`,
-  getAll: `/leave/getAll`,
-  get: `/leave/get`,
-  update: `/leave/update`,
+  base: `${adminBase}/leave`,
+  getAll: `${adminBase}/leave/getAll`,
+  get: `${adminBase}/leave/get`,
+  update: `${adminBase}/leave/update`,
 };
 
 export const AdminAuthEndpoints = {
-  login: `/admin/auth/login`,
-  changePassword: `/admin/change-password`,
+  login: `${adminBase}/admin/auth/login`,
+  changePassword: `${adminBase}/admin/change-password`,
 };
