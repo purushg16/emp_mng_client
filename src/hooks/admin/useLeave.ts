@@ -29,7 +29,7 @@ const useGetAllLeave = (page = 1, pageSize = 5) => {
 };
 
 const useGetSingleLeave = (id: string) =>
-  useQuery<Leave, Error>({
+  useQuery({
     queryKey: [...CACHE_LEAVE, id],
     queryFn: () => getSingleLeave(id),
     staleTime: ms("24h"),

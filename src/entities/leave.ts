@@ -16,11 +16,11 @@ export default interface Leave extends LeaveFields, LeaveApproveFields {
   postedAt: Date;
   employeeId: string;
   leaveTypeId: string;
+  leaveTypeName: string;
 }
 
 export interface AdminLeave extends Leave {
   firstName: string;
   lastName: string;
-  leaveTypeName: string;
   desc: string;
 }

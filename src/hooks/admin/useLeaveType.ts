@@ -19,7 +19,7 @@ const useGetAllLeaveType = () => {
 };
 
 const useGetSingleLeaveType = (id: string) => {
-  return useQuery<LeaveType, Error>({
+  return useQuery({
     queryKey: [...CACHE_LEAVE_TYPE, id],
     queryFn: () => getSingleLeaveType(id),
     staleTime: ms("24h"),

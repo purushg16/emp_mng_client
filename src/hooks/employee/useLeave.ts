@@ -1,9 +1,4 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CACHE_LEAVE } from "../../data/employee/cache_key";
 import Leave from "../../entities/leave";
 import { FetchResponse } from "../../service/api-client";
@@ -13,25 +8,28 @@ import {
   requestLeave,
 } from "../../service/employee-client";
 import ms from "ms";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
-const useGetAllLeave = (itemsPerPage = 5) =>
-  useInfiniteQuery<FetchResponse<Leave>, Error>({
-    queryKey: CACHE_LEAVE,
-    queryFn: ({ pageParam = 1 }) =>
+const useGetAllLeave = (page = 1, pageSize = 5) => {
+  const status = useSelector((state: RootState) => state.leaveFilter.status);
+
+  return useQuery<FetchResponse<Leave>, Error>({
+    queryKey: [...CACHE_LEAVE, page, pageSize, status],
+    queryFn: () =>
       getAllLeave({
         params: {
-          page: pageParam,
-          itemsPerPage: itemsPerPage,
+          status: status === "all" ? undefined : status,
+          page,
+          page_size: pageSize,
         },
       }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.next ? allPages.length + 1 : undefined,
-    staleTime: ms("24h"),
+    placeholderData: (previousData) => previousData,
   });
+};
 
 const useGetSingleLeave = (id: string) =>
-  useQuery<Leave, Error>({
+  useQuery({
     queryKey: [...CACHE_LEAVE, id],
     queryFn: () => getSingleLeave(id),
     staleTime: ms("24h"),
@@ -44,7 +42,7 @@ const usePostLeave = (successCb?: () => void, errorCb?: () => void) => {
     mutationFn: requestLeave,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [CACHE_LEAVE],
+        queryKey: CACHE_LEAVE,
       });
       if (successCb) successCb();
     },

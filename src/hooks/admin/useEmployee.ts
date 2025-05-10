@@ -25,7 +25,7 @@ const useGetAllEmployee = (page = 1, pageSize = 5) =>
   });
 
 const useGetSingleEmployee = (id: string) => {
-  return useQuery<Employee, Error>({
+  return useQuery({
     queryKey: [...CACHE_EMPLOYEES, id],
     queryFn: () => getSingleEmployee(id),
     staleTime: ms("24h"),

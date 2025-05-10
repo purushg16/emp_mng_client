@@ -47,7 +47,7 @@ const LoginPage = () => {
           <TextField
             fullWidth
             size="small"
-            label="Username"
+            label={role === "admin" ? "Username" : "Email or Emp. Code"}
             name="username"
             value={formik.values.username}
             onChange={formik.handleChange}

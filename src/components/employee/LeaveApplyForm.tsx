@@ -4,16 +4,19 @@ import { ApplyLeaveFormValues } from "../../entities/formValues";
 import { initialLeaveFormValues } from "../../data/employee/initialFormValues";
 import { leaveApplySchema } from "../../data/validations/leaveSchema";
 import LeaveDatePicker from "./LeaveDatePicker";
+import LeaveTypeSelector from "./LeaveTypeSelector";
 
 type ApplyLeaveModalProps = {
   onClose: () => void;
   onSubmit: (values: ApplyLeaveFormValues) => void;
   initialValues?: ApplyLeaveFormValues;
+  loading?: boolean;
 };
 
 const LeaveApplyForm = ({
   onClose,
   onSubmit,
+  loading = false,
   initialValues = initialLeaveFormValues,
 }: ApplyLeaveModalProps) => {
   const formik = useFormik<ApplyLeaveFormValues>({
@@ -22,7 +25,6 @@ const LeaveApplyForm = ({
     onSubmit: (values) => {
       onSubmit(values);
       formik.resetForm();
-      onClose();
     },
   });
 
@@ -41,6 +43,15 @@ const LeaveApplyForm = ({
               disabled={formik.values.from === null}
             />
           </Stack>
+
+          <LeaveTypeSelector
+            value={formik.values.leaveTypeId}
+            onChange={formik.handleChange}
+            error={formik.errors.leaveTypeId || ""}
+            isError={
+              formik.touched.leaveTypeId && Boolean(formik.errors.leaveTypeId)
+            }
+          />
 
           <Typography variant="subtitle1" gutterBottom>
             Description
@@ -69,7 +80,7 @@ const LeaveApplyForm = ({
 
           <Stack gap={4} direction="row" justifyContent="end" mt={4}>
             <Button onClick={onClose}>Cancel</Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" loading={loading}>
               Request Leave
             </Button>
           </Stack>

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { EmployeeLogin } from "../../entities/auth";
 import Login, { ChangePassword } from "../../entities/credentials";
@@ -62,9 +62,12 @@ const useEmployeeEditProfile = (
   successCb?: () => void,
   errorCb?: () => void
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: editProfile,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CACHE_PROFILE });
       if (successCb) successCb();
     },
     onError: () => {

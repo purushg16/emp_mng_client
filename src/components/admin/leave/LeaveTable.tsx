@@ -10,13 +10,16 @@ import {
   CircularProgress,
   Box,
   Stack,
+  Alert,
 } from "@mui/material";
 import { format } from "date-fns";
 import LeaveActionModal from "./LeaveActionModal";
-import { AdminLeave } from "../../../entities/leave";
+import Leave, { AdminLeave } from "../../../entities/leave";
+import isAdminLeave from "../../../helpers/adminLeaveTypeFinder";
 
 interface Props {
-  data: AdminLeave[];
+  isEmployee?: boolean;
+  data: AdminLeave[] | Leave[];
   isLoading: boolean;
   page: number;
   pageSize: number;
@@ -26,6 +29,7 @@ interface Props {
 }
 
 const LeaveTable = ({
+  isEmployee = false,
   data,
   isLoading,
   page,
@@ -41,10 +45,19 @@ const LeaveTable = ({
           <TableHead>
             <TableRow>
               <TableCell>Sl.No.</TableCell>
-              <TableCell>Name</TableCell>
+              {!isEmployee && <TableCell>Name</TableCell>}
               <TableCell>Leave Type</TableCell>
+              {isEmployee && (
+                <>
+                  <TableCell>Duration</TableCell>
+                  <TableCell>Description</TableCell>
+                </>
+              )}
               <TableCell>Applied At</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              {isEmployee && <TableCell> Remarks </TableCell>}
+              <TableCell align="center">
+                {isEmployee ? "Status" : "Actions"}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -60,20 +73,63 @@ const LeaveTable = ({
               data.map((leave, index) => (
                 <TableRow key={leave.id}>
                   <TableCell>{(page - 1) * pageSize + index + 1}</TableCell>
-                  <TableCell>
-                    {leave.firstName} {leave.lastName}
-                  </TableCell>
+                  {!isEmployee && isAdminLeave(leave) && (
+                    <TableCell>
+                      {leave.firstName} {leave.lastName}
+                    </TableCell>
+                  )}
                   <TableCell>{leave.leaveTypeName}</TableCell>
+                  {isEmployee && (
+                    <>
+                      <TableCell>
+                        {format(leave.from, "dd/MM/yyyy")}
+                        <br />
+                        {format(leave.to, "dd/MM/yyyy")}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          fontSize: "12px",
+                          fontStyle: "italic",
+                          width: 200,
+                        }}
+                      >
+                        {leave.desc}
+                      </TableCell>
+                    </>
+                  )}
                   <TableCell>
-                    {format(leave.postedAt, "dd/mm/yyyy hh:mm:ss")}
+                    {format(leave.postedAt, "dd/MM/yyyy")}
+                    <br />
+                    {format(leave.postedAt, "hh:mm:ss")}
                   </TableCell>
+                  {isEmployee && <TableCell>{leave.remark || "-"}</TableCell>}
                   <TableCell>
                     <Stack
                       direction="row"
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <LeaveActionModal leave={leave} />
+                      {!isEmployee && isAdminLeave(leave) && (
+                        <LeaveActionModal leave={leave} />
+                      )}
+                      {isEmployee && (
+                        <Alert
+                          sx={{
+                            py: 0,
+                            px: 0.8,
+                            textTransform: "capitalize",
+                          }}
+                          severity={
+                            leave.status === "approved"
+                              ? "success"
+                              : leave.status === "declined"
+                              ? "error"
+                              : "warning"
+                          }
+                        >
+                          {leave.status}
+                        </Alert>
+                      )}
                     </Stack>
                   </TableCell>
                 </TableRow>

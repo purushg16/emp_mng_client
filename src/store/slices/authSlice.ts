@@ -29,7 +29,7 @@ const authSlice = createSlice({
     ) {
       state.role = action.payload.role;
       state.token = action.payload.token;
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem(token_key[state.role], action.payload.token);
     },
     setEmployeeData(state, action: PayloadAction<EmployeeData>) {
       state.employeeData = action.payload;

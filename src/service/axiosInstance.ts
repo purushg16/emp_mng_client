@@ -1,20 +1,19 @@
+// utils/axiosInstance.ts
 import axios from "axios";
 import token_key, { CurrentClient } from "../data/token_key";
 
-const cl = window.location.pathname.split("/")[1] as CurrentClient;
+export const getAxiosInstance = (role: CurrentClient) => {
+  const instance = axios.create({
+    baseURL: import.meta.env.VITE_BASE_URL,
+  });
 
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-});
+  instance.interceptors.request.use((config) => {
+    const token = localStorage.getItem(token_key[role]);
+    if (!config.url?.includes("/auth/login") && token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
 
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem(token_key[cl]);
-
-  if (!config.url?.includes("/auth/login") && token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
-
-export default axiosInstance;
+  return instance;
+};
