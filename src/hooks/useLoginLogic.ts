@@ -26,7 +26,7 @@ export const useLoginLogic = () => {
   });
 
   return {
-    role,
+    role: role,
     setRole,
     formik,
     isLoading: isPending || isLoading,

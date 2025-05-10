@@ -44,12 +44,28 @@ const EmployeeForm = ({
 
   return (
     <FormikProvider value={formik}>
-      <form onSubmit={formik.handleSubmit} noValidate>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log(formik.values);
+          formik.handleSubmit();
+        }}
+        noValidate
+      >
         <Grid container spacing={0}>
           <Typography variant="subtitle1" gutterBottom>
-            Name
+            Entry
           </Typography>
           <Stack width="100%" direction="row" gap={2}>
+            {!isEmployee && action === "add" && (
+              <EmployeeTextField
+                label="Emp. Code"
+                name="code"
+                type="text"
+                disabled={preview}
+              />
+            )}
+
             <EmployeeTextField
               label="First Name"
               name="firstName"
@@ -63,7 +79,7 @@ const EmployeeForm = ({
               disabled={preview}
             />
           </Stack>
-          {(!isEmployee || action === "add") && (
+          {!isEmployee && action === "add" && (
             <>
               <Typography variant="subtitle1" mt={1} gutterBottom>
                 Security

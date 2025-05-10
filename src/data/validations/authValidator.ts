@@ -5,6 +5,11 @@ export default Yup.object({
   password: Yup.string().required("Password is required"),
 });
 
+export const employeeAuthValidator = Yup.object({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required"),
+});
+
 export const changePasswordSchema = Yup.object({
   oldPassword: Yup.string().required("Old Password is required"),
   newPassword: Yup.string()
