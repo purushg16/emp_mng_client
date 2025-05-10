@@ -3,13 +3,9 @@ import { useFormik } from "formik";
 import authValidator from "../data/validations/authValidator";
 import { useAdminLogin } from "./admin/useAuth";
 import { useEmployeeLogin } from "./employee/useAuth";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store";
-import { setRole, setEmployeeData } from "../store/slices/authSlice";
 
 export const useLoginLogic = () => {
-  const [user, setUserType] = useState<"admin" | "employee">("employee");
-  const dispatch = useDispatch<AppDispatch>();
+  const [role, setRole] = useState<"admin" | "employee">("employee");
 
   const { mutate: adminLogin, isPending } = useAdminLogin();
   const { mutate: employeeLogin, isPending: isLoading } = useEmployeeLogin();
@@ -21,26 +17,17 @@ export const useLoginLogic = () => {
     },
     validationSchema: authValidator,
     onSubmit: (values) => {
-      if (user === "admin") {
-        adminLogin(values, {
-          onSuccess: () => {
-            dispatch(setRole("admin"));
-          },
-        });
+      if (role === "admin") {
+        adminLogin(values);
       } else {
-        employeeLogin(values, {
-          onSuccess: (data) => {
-            dispatch(setRole("employee"));
-            dispatch(setEmployeeData(data.data[0].employee));
-          },
-        });
+        employeeLogin(values);
       }
     },
   });
 
   return {
-    role: user,
-    setRole: setUserType,
+    role,
+    setRole,
     formik,
     isLoading: isPending || isLoading,
   };

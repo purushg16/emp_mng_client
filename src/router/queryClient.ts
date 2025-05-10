@@ -4,7 +4,7 @@ import { ErrorResponse, SuccessResponse } from "../entities/response";
 import { enqueueSnackbar } from "notistack";
 
 const cl = window.location.pathname.split("/")[1] as CurrentClient;
-const url = window.location.origin + "/login/";
+// const url = window.location.origin + "/login/";
 
 const client = new QueryClient({
   defaultOptions: {
@@ -13,7 +13,7 @@ const client = new QueryClient({
         const err = error as ErrorResponse;
         if (err.response?.status === 401) {
           localStorage.removeItem(token_key[cl]);
-          window.location.href = url;
+          // window.location.href = url;
         }
         return false;
       },
@@ -33,7 +33,7 @@ const client = new QueryClient({
           enqueueSnackbar(msg, { variant: "error" });
           if (err.response?.status === 401) {
             localStorage.removeItem(token_key[cl]);
-            if (window.location.href !== url) window.location.href = url;
+            // if (window.location.href !== url) window.location.href = url;
           }
         } else if (data) {
           const res = data as SuccessResponse;

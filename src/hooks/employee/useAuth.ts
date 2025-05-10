@@ -11,6 +11,9 @@ import {
   employeeChangePassword,
 } from "../../service/employee-client";
 import { FetchResponse } from "../../service/api-client";
+import { AppDispatch } from "../../store";
+import { setRole } from "../../store/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 const useGetEmployeeProfile = () =>
   useQuery({
@@ -21,30 +24,36 @@ const useGetEmployeeProfile = () =>
 
 const useEmployeeLogin = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   return useMutation<FetchResponse<EmployeeLogin>, Error, Login>({
     mutationFn: (credentials) => employeeLogin(credentials),
     onSuccess: (data) => {
-      localStorage.setItem(
-        import.meta.env.VITE_REACT_APP_EMP_TOKEN,
-        data.data[0].token
+      dispatch(
+        setRole({
+          role: "employee",
+          token: data.data[0].token,
+        })
       );
-      navigate("/admin");
+      navigate("/employee");
     },
   });
 };
 
 const useEmployeeChangePassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   return useMutation<FetchResponse<EmployeeLogin>, Error, ChangePassword>({
     mutationFn: (credentials) => employeeChangePassword(credentials),
     onSuccess: (data) => {
-      localStorage.setItem(
-        import.meta.env.VITE_REACT_APP_EMP_TOKEN,
-        data.data[0].token
+      dispatch(
+        setRole({
+          role: "employee",
+          token: data.data[0].token,
+        })
       );
-      navigate("/admin");
+      navigate("/employee");
     },
   });
 };
