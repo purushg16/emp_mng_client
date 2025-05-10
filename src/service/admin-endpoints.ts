@@ -1,5 +1,10 @@
 const adminBase = "/admin";
 
+export const dashboardAdminEndpoints = {
+  base: `${adminBase}/dashboard`,
+  get: `${adminBase}/dashboard/get`,
+};
+
 export const departmentAdminEndpoints = {
   base: `${adminBase}/departments`,
   getAll: `${adminBase}/departments/getAll`,

@@ -1,17 +1,25 @@
 import { AdminLogin } from "../entities/auth";
 import Login, { ChangePassword } from "../entities/credentials";
+import { DashboardStats } from "../entities/dashboard";
 import { Department, DepartmentFields } from "../entities/department";
 import Employee, { EmployeeFields } from "../entities/employee";
 import Leave, { AdminLeave, LeaveApproveFields } from "../entities/leave";
 import { LeaveType, LeaveTypeFields } from "../entities/leaveType";
 import {
   AdminAuthEndpoints,
+  dashboardAdminEndpoints,
   departmentAdminEndpoints,
   EmployeeAdminEndpoints,
   LeaveAdminEndpoints,
   leaveTypeAdminEndpoints,
 } from "./admin-endpoints";
 import APIClient from "./api-client";
+
+// dashboard
+export const getDashboardStats = new APIClient<DashboardStats>(
+  dashboardAdminEndpoints.get,
+  "admin"
+).getAll;
 
 // Department
 export const getAllDepartments = new APIClient<Department>(
