@@ -15,6 +15,7 @@ import { setRole } from "../../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useLogout from "../useLogout";
+import { EmployeeProfileFormValues } from "../../entities/formValues";
 
 const useGetEmployeeProfile = () =>
   useQuery({
@@ -71,7 +72,7 @@ const useEmployeeEditProfile = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: editProfile,
+    mutationFn: (data: EmployeeProfileFormValues) => editProfile("", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CACHE_PROFILE });
       if (successCb) successCb();

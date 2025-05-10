@@ -3,7 +3,10 @@ import EmployeeForm from "../../components/admin/employee/EmployeeForm";
 import PageWrapper from "../../layouts/PageWrapper";
 import { useState } from "react";
 import { EmployeeProfileFormValues } from "../../entities/formValues";
-import { useGetEmployeeProfile } from "../../hooks/employee/useAuth";
+import {
+  useEmployeeEditProfile,
+  useGetEmployeeProfile,
+} from "../../hooks/employee/useAuth";
 import AdviseChangePasswordDialog from "../../components/employee/AdviseChangePasswordDialog";
 
 const ProfilePage = () => {
@@ -14,8 +17,10 @@ const ProfilePage = () => {
     setEditMode(false);
   };
 
+  const { mutate, isPending } = useEmployeeEditProfile(handleExit);
+
   const handleSubmit = (value: EmployeeProfileFormValues) => {
-    console.log(value);
+    mutate(value);
   };
 
   return (
@@ -36,6 +41,7 @@ const ProfilePage = () => {
           variant="contained"
           onClick={() => setEditMode(!editMode)}
           sx={{ width: "max-content", mx: "auto" }}
+          loading={isPending}
         >
           Edit Profile
         </Button>

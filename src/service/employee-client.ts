@@ -5,20 +5,18 @@ import {
   leaveTypeEmployeeEndpoints,
   ProfileEmployeeEndpoints,
 } from "./employee-endpoints";
-import Employee, {
-  EmployeeFields,
-  EmployeeProfile,
-} from "../entities/employee";
+import Employee, { EmployeeProfile } from "../entities/employee";
 import { LeaveType } from "../entities/leaveType";
 import Leave, { LeaveFields } from "../entities/leave";
 import Login, { ChangePassword } from "../entities/credentials";
 import { EmployeeLogin } from "../entities/auth";
+import { EmployeeProfileFormValues } from "../entities/formValues";
 
 // Profile
 export const getProfile = new APIClient<EmployeeProfile>(
   ProfileEmployeeEndpoints.get
 ).get;
-export const editProfile = new APIClient<Partial<EmployeeFields>, Employee>(
+export const editProfile = new APIClient<EmployeeProfileFormValues, Employee>(
   ProfileEmployeeEndpoints.update
 ).put;
 

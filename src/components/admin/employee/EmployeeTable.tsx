@@ -70,6 +70,7 @@ const EmployeeTable = ({
                 </TableCell>
               </TableRow>
             ) : (
+              data.some((obj) => Object.keys(obj).length > 0) &&
               data.map((emp, index) => (
                 <TableRow key={emp.code}>
                   <TableCell>{(page - 1) * pageSize + index + 1}</TableCell>

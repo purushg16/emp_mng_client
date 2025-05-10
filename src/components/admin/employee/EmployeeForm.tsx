@@ -3,7 +3,9 @@ import { FormikProvider, useFormik } from "formik";
 import React from "react";
 import genders from "../../../data/admin/genders";
 import { initialEmployeeValues } from "../../../data/admin/initialFormValues";
-import { editEmployeeSchema } from "../../../data/validations/employeeSchema";
+import employeeSchema, {
+  editEmployeeSchema,
+} from "../../../data/validations/employeeSchema";
 import { EmployeeFields } from "../../../entities/employee";
 import type { EmployeeProfileFormValues } from "../../../entities/formValues";
 import SelectInput from "../SelectInput";
@@ -33,7 +35,7 @@ const EmployeeForm = ({
 }: EmployeeFormProps) => {
   const formik = useFormik({
     initialValues,
-    validationSchema: editEmployeeSchema,
+    validationSchema: action === "add" ? employeeSchema : editEmployeeSchema,
     onSubmit,
   });
 

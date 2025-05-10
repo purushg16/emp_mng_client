@@ -27,6 +27,7 @@ export default function EmployeeStatusEditor({ id, status }: Props) {
     setOpen(false);
   };
 
+  console.log(id);
   const { mutate, isPending } = useEditEmployee(id, handleClose);
 
   const handleSubmit = () => {

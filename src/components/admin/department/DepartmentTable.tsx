@@ -59,6 +59,7 @@ const DepartmentTable = ({
                 </TableCell>
               </TableRow>
             ) : (
+              data.some((obj) => Object.keys(obj).length > 0) &&
               data.map((dept, index) => (
                 <TableRow key={dept.id}>
                   <TableCell>{(page - 1) * pageSize + index + 1}</TableCell>

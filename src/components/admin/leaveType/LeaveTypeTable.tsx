@@ -34,6 +34,7 @@ const LeaveTypeTable = () => {
         <TableBody>
           {isSuccess &&
             isFetched &&
+            data.data.length > 0 &&
             data.data.map((row, ind) => (
               <TableRow
                 key={row.id}

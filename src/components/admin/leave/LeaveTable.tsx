@@ -70,69 +70,76 @@ const LeaveTable = ({
                 </TableCell>
               </TableRow>
             ) : (
+              data.some((obj) => Object.keys(obj).length > 0) &&
               data.map((leave, index) => (
-                <TableRow key={leave.id}>
-                  <TableCell>{(page - 1) * pageSize + index + 1}</TableCell>
-                  {!isEmployee && isAdminLeave(leave) && (
-                    <TableCell>
-                      {leave.firstName} {leave.lastName}
-                    </TableCell>
-                  )}
-                  <TableCell>{leave.leaveTypeName}</TableCell>
-                  {isEmployee && (
-                    <>
-                      <TableCell>
-                        {format(leave.from, "dd/MM/yyyy")}
-                        <br />
-                        {format(leave.to, "dd/MM/yyyy")}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontSize: "12px",
-                          fontStyle: "italic",
-                          width: 200,
-                        }}
-                      >
-                        {leave.desc}
-                      </TableCell>
-                    </>
-                  )}
-                  <TableCell>
-                    {format(leave.postedAt, "dd/MM/yyyy")}
-                    <br />
-                    {format(leave.postedAt, "hh:mm:ss")}
-                  </TableCell>
-                  {isEmployee && <TableCell>{leave.remark || "-"}</TableCell>}
-                  <TableCell>
-                    <Stack
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
+                <>
+                  {leave && (
+                    <TableRow key={leave.id}>
+                      <TableCell>{(page - 1) * pageSize + index + 1}</TableCell>
                       {!isEmployee && isAdminLeave(leave) && (
-                        <LeaveActionModal leave={leave} />
+                        <TableCell>
+                          {leave.firstName} {leave.lastName}
+                        </TableCell>
                       )}
+                      <TableCell>{leave.leaveTypeName}</TableCell>
                       {isEmployee && (
-                        <Alert
-                          sx={{
-                            py: 0,
-                            px: 0.8,
-                            textTransform: "capitalize",
-                          }}
-                          severity={
-                            leave.status === "approved"
-                              ? "success"
-                              : leave.status === "declined"
-                              ? "error"
-                              : "warning"
-                          }
-                        >
-                          {leave.status}
-                        </Alert>
+                        <>
+                          <TableCell>
+                            {format(leave.from, "dd/MM/yyyy")}
+                            <br />
+                            {format(leave.to, "dd/MM/yyyy")}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontSize: "12px",
+                              fontStyle: "italic",
+                              width: 200,
+                            }}
+                          >
+                            {leave.desc}
+                          </TableCell>
+                        </>
                       )}
-                    </Stack>
-                  </TableCell>
-                </TableRow>
+                      <TableCell>
+                        {format(leave.postedAt, "dd/MM/yyyy")}
+                        <br />
+                        {format(leave.postedAt, "hh:mm:ss")}
+                      </TableCell>
+                      {isEmployee && (
+                        <TableCell>{leave.remark || "-"}</TableCell>
+                      )}
+                      <TableCell>
+                        <Stack
+                          direction="row"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          {!isEmployee && isAdminLeave(leave) && (
+                            <LeaveActionModal leave={leave} />
+                          )}
+                          {isEmployee && (
+                            <Alert
+                              sx={{
+                                py: 0,
+                                px: 0.8,
+                                textTransform: "capitalize",
+                              }}
+                              severity={
+                                leave.status === "approved"
+                                  ? "success"
+                                  : leave.status === "declined"
+                                  ? "error"
+                                  : "warning"
+                              }
+                            >
+                              {leave.status}
+                            </Alert>
+                          )}
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
               ))
             )}
           </TableBody>
