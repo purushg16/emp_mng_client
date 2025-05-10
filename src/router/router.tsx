@@ -1,29 +1,33 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import Layout from "../layouts/Layout";
-import DashboardPage from "../pages/admin/DashboardPage";
-import DepartmentPage from "../pages/admin/DepartmentPage";
-import LeaveTypePage from "../pages/admin/LeaveTypePage";
-import LeavePage from "../pages/admin/LeavePage";
-import EmployeePage from "../pages/admin/EmployeePage";
-import ProfilePage from "../pages/employee/ProfilePage";
-import EmpLeavePage from "../pages/employee/LeavePage";
-import LoginPage from "../pages/LoginPage";
+import { withSuspense } from "../components/common/withSuspense";
+
+// Lazy imports
+import { lazy } from "react";
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const DashboardPage = lazy(() => import("../pages/admin/DashboardPage"));
+const DepartmentPage = lazy(() => import("../pages/admin/DepartmentPage"));
+const LeaveTypePage = lazy(() => import("../pages/admin/LeaveTypePage"));
+const LeavePage = lazy(() => import("../pages/admin/LeavePage"));
+const EmployeePage = lazy(() => import("../pages/admin/EmployeePage"));
+const ProfilePage = lazy(() => import("../pages/employee/ProfilePage"));
+const EmpLeavePage = lazy(() => import("../pages/employee/LeavePage"));
 
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <LoginPage />,
+    element: withSuspense(LoginPage),
   },
   {
     path: "/admin",
     element: <Layout />,
     children: [
       { index: true, element: <Navigate to="dashboard" /> },
-      { path: "dashboard", element: <DashboardPage /> },
-      { path: "department", element: <DepartmentPage /> },
-      { path: "leaveType", element: <LeaveTypePage /> },
-      { path: "leave", element: <LeavePage /> },
-      { path: "employee", element: <EmployeePage /> },
+      { path: "dashboard", element: withSuspense(DashboardPage) },
+      { path: "department", element: withSuspense(DepartmentPage) },
+      { path: "leaveType", element: withSuspense(LeaveTypePage) },
+      { path: "leave", element: withSuspense(LeavePage) },
+      { path: "employee", element: withSuspense(EmployeePage) },
     ],
   },
   {
@@ -31,8 +35,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Navigate to="myProfile" /> },
-      { path: "myProfile", element: <ProfilePage /> },
-      { path: "myLeaves", element: <EmpLeavePage /> },
+      { path: "myProfile", element: withSuspense(ProfilePage) },
+      { path: "myLeaves", element: withSuspense(EmpLeavePage) },
     ],
   },
 ]);
