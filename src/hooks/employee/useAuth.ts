@@ -10,7 +10,6 @@ import {
   getProfile,
   employeeChangePassword,
 } from "../../service/employee-client";
-import { useSnackbar } from "notistack";
 import { FetchResponse } from "../../service/api-client";
 
 const useGetEmployeeProfile = () =>
@@ -22,13 +21,10 @@ const useGetEmployeeProfile = () =>
 
 const useEmployeeLogin = () => {
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation<FetchResponse<EmployeeLogin>, Error, Login>({
     mutationFn: (credentials) => employeeLogin(credentials),
     onSuccess: (data) => {
-      enqueueSnackbar("Login Successfull", { variant: "success" });
-
       localStorage.setItem(
         import.meta.env.VITE_REACT_APP_EMP_TOKEN,
         data.data[0].token
@@ -40,19 +36,16 @@ const useEmployeeLogin = () => {
 
 const useEmployeeChangePassword = () => {
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation<FetchResponse<EmployeeLogin>, Error, ChangePassword>({
     mutationFn: (credentials) => employeeChangePassword(credentials),
     onSuccess: (data) => {
-      enqueueSnackbar("Password Changed Successfully", { variant: "success" });
       localStorage.setItem(
         import.meta.env.VITE_REACT_APP_EMP_TOKEN,
         data.data[0].token
       );
       navigate("/admin");
     },
-    onError: (error) => enqueueSnackbar(error.message, { variant: "error" }),
   });
 };
 
@@ -60,17 +53,13 @@ const useEmployeeEditProfile = (
   successCb?: () => void,
   errorCb?: () => void
 ) => {
-  const { enqueueSnackbar } = useSnackbar();
-
   return useMutation({
     mutationFn: editProfile,
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (successCb) successCb();
-      enqueueSnackbar(data.message, { variant: "success" });
     },
-    onError: (err) => {
+    onError: () => {
       if (errorCb) errorCb();
-      enqueueSnackbar(err.message, { variant: "error" });
     },
   });
 };

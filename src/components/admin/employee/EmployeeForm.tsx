@@ -63,15 +63,14 @@ const EmployeeForm = ({
               disabled={preview}
             />
           </Stack>
-          {!isEmployee ||
-            (action === "add" && (
-              <>
-                <Typography variant="subtitle1" mt={1} gutterBottom>
-                  Security
-                </Typography>
-                <EmployeePasswordInput />
-              </>
-            ))}
+          {(!isEmployee || action === "add") && (
+            <>
+              <Typography variant="subtitle1" mt={1} gutterBottom>
+                Security
+              </Typography>
+              <EmployeePasswordInput />
+            </>
+          )}
 
           <Typography variant="subtitle1" mt={1} gutterBottom>
             Basics

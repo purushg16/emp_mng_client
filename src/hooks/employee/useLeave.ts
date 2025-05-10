@@ -13,7 +13,6 @@ import {
   requestLeave,
 } from "../../service/employee-client";
 import ms from "ms";
-import { useSnackbar } from "notistack";
 
 const useGetAllLeave = (itemsPerPage = 5) =>
   useInfiniteQuery<FetchResponse<Leave>, Error>({
@@ -40,19 +39,16 @@ const useGetSingleLeave = (id: string) =>
 
 const usePostLeave = (successCb?: () => void, errorCb?: () => void) => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation({
     mutationFn: requestLeave,
-    onSuccess: (data) => {
-      enqueueSnackbar(data.message, { variant: "success" });
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [CACHE_LEAVE],
       });
       if (successCb) successCb();
     },
-    onError: (err) => {
-      enqueueSnackbar(err.message, { variant: "error" });
+    onError: () => {
       if (errorCb) errorCb();
     },
   });

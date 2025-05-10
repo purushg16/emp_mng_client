@@ -1,9 +1,7 @@
-import { AppBar, Toolbar, Typography, Box, IconButton } from "@mui/material";
-// import { useLocation } from "react-router";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import AuthMenu from "./AuthMenu";
 
 const Appbar = () => {
-  // const pathName = useLocation().pathname.split("/")[1];
-
   return (
     <AppBar
       position="static"
@@ -19,9 +17,7 @@ const Appbar = () => {
           Employee Management
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <IconButton>{/* <AccountCircleIcon /> */}</IconButton>
-        </Box>
+        <AuthMenu />
       </Toolbar>
     </AppBar>
   );
