@@ -1,8 +1,10 @@
-import EmployeeTable from "../../components/admin/employee/EmployeeTable";
+import { Stack } from "@mui/material";
+import { useState } from "react";
 import EmployeeActionModal from "../../components/admin/employee/EmployeeActionModal";
+import EmployeeTable from "../../components/admin/employee/EmployeeTable";
+import SearchFilter from "../../components/admin/SearchFilter";
 import { useGetAllEmployee } from "../../hooks/admin/useEmployee";
 import PageWrapper from "../../layouts/PageWrapper";
-import { useState } from "react";
 
 const EmployeePage = () => {
   const [page, setPage] = useState(1);
@@ -12,8 +14,13 @@ const EmployeePage = () => {
 
   return (
     <PageWrapper
-      title="Manage Employee"
-      actions={<EmployeeActionModal action="add" />}
+      title="Employee"
+      actions={
+        <Stack direction="row" gap={2}>
+          <EmployeeActionModal action="add" />
+          <SearchFilter for="employee" />
+        </Stack>
+      }
     >
       <EmployeeTable
         data={data?.data || []}

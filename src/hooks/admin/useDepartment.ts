@@ -10,15 +10,22 @@ import {
   updateDepartment,
 } from "../../service/admin-client";
 import { FetchResponse } from "../../service/api-client";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const useGetAllDepartment = (page = 1, pageSize = 5) => {
+  const searchDept = useSelector(
+    (state: RootState) => state.searchFilter.department
+  );
+
   return useQuery({
-    queryKey: [...CACHE_DEPARTMENTS, page, pageSize],
+    queryKey: [...CACHE_DEPARTMENTS, page, pageSize, searchDept],
     queryFn: () =>
       getAllDepartments({
         params: {
           page,
           page_size: pageSize,
+          search: searchDept,
         },
       }),
     placeholderData: (previousData) => previousData,

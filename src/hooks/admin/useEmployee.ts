@@ -10,19 +10,27 @@ import {
   updateEmployee,
 } from "../../service/admin-client";
 import { FetchResponse } from "../../service/api-client";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
-const useGetAllEmployee = (page = 1, pageSize = 5) =>
-  useQuery({
-    queryKey: [...CACHE_EMPLOYEES, page, pageSize],
+const useGetAllEmployee = (page = 1, pageSize = 5) => {
+  const searchEmp = useSelector(
+    (state: RootState) => state.searchFilter.employee
+  );
+
+  return useQuery({
+    queryKey: [...CACHE_EMPLOYEES, page, pageSize, searchEmp],
     queryFn: () =>
       getAllEmployee({
         params: {
           page,
           page_size: pageSize,
+          search: searchEmp,
         },
       }),
     placeholderData: (previousData) => previousData,
   });
+};
 
 const useGetSingleEmployee = (id: string) => {
   return useQuery({

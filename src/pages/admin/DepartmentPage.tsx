@@ -3,6 +3,8 @@ import DeptActionModal from "../../components/admin/department/DeptActionModal";
 import { useGetAllDepartment } from "../../hooks/admin/useDepartment";
 import { useState } from "react";
 import PageWrapper from "../../layouts/PageWrapper";
+import { Stack } from "@mui/material";
+import SearchFilter from "../../components/admin/SearchFilter";
 
 const DepartmentPage = () => {
   const [page, setPage] = useState(1);
@@ -13,7 +15,12 @@ const DepartmentPage = () => {
   return (
     <PageWrapper
       title="Manage Department"
-      actions={<DeptActionModal action="add" />}
+      actions={
+        <Stack direction="row" gap={2}>
+          <DeptActionModal action="add" />
+          <SearchFilter for="department" />
+        </Stack>
+      }
     >
       <DepartmentTable
         data={data?.data || []}
