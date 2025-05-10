@@ -4,11 +4,11 @@ import PageWrapper from "../../layouts/PageWrapper";
 import { useState } from "react";
 import { EmployeeProfileFormValues } from "../../entities/formValues";
 import { useGetEmployeeProfile } from "../../hooks/employee/useAuth";
+import AdviseChangePasswordDialog from "../../components/employee/AdviseChangePasswordDialog";
 
 const ProfilePage = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const { data, status, fetchStatus } = useGetEmployeeProfile();
-  console.log(data);
 
   const handleExit = () => {
     setEditMode(false);
@@ -39,6 +39,9 @@ const ProfilePage = () => {
         >
           Edit Profile
         </Button>
+      )}
+      {status === "success" && (
+        <AdviseChangePasswordDialog loginCount={data.data[0].lastLogin} />
       )}
     </PageWrapper>
   );

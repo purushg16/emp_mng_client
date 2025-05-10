@@ -15,5 +15,5 @@ export const LeaveEmployeeEndpoints = {
 
 export const EmployeeAuthEndpoints = {
   login: `/employee/auth/login`,
-  changePassword: `/employee/update-password`,
+  changePassword: `/employee/profile/update-password`,
 };

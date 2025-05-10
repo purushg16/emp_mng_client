@@ -4,16 +4,16 @@ import { ErrorResponse, SuccessResponse } from "../entities/response";
 import { enqueueSnackbar } from "notistack";
 
 const cl = window.location.pathname.split("/")[1] as CurrentClient;
-// const url = window.location.origin + "/login/";
+const url = window.location.origin + "/login/";
 
 const client = new QueryClient({
   defaultOptions: {
     queries: {
       throwOnError(error) {
         const err = error as ErrorResponse;
-        if (err.response?.status === 401) {
+        if (err.response?.status === 401 || err.response?.status === 403) {
           localStorage.removeItem(token_key[cl]);
-          // window.location.href = url;
+          window.location.href = url;
         }
         return false;
       },
@@ -31,9 +31,9 @@ const client = new QueryClient({
           const err = error as ErrorResponse;
           const msg = err.response?.data.error || error.message;
           enqueueSnackbar(msg, { variant: "error" });
-          if (err.response?.status === 401) {
+          if (err.response?.status === 401 || err.response?.status === 403) {
             localStorage.removeItem(token_key[cl]);
-            // if (window.location.href !== url) window.location.href = url;
+            if (window.location.href !== url) window.location.href = url;
           }
         } else if (data) {
           const res = data as SuccessResponse;

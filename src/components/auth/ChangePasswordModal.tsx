@@ -14,7 +14,11 @@ import { useEmployeeChangePassword } from "../../hooks/employee/useAuth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 
-const ChangePasswordModal = () => {
+interface Props {
+  variant?: "text" | "contained" | "outlined";
+}
+
+const ChangePasswordModal = ({ variant = "text" }: Props) => {
   const role = useSelector((state: RootState) => state.auth.role);
 
   const [open, setOpen] = React.useState(false);
@@ -48,7 +52,7 @@ const ChangePasswordModal = () => {
   return (
     <React.Fragment>
       <Button
-        variant="text"
+        variant={variant}
         fullWidth
         onClick={handleClickOpen}
         startIcon={<LuKey size={12} />}

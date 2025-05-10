@@ -27,3 +27,7 @@ export default interface Employee extends EmployeeFields {
   id: string;
   createdAt: Date;
 }
+
+export interface EmployeeProfile extends Employee {
+  lastLogin: Date | null;
+}
